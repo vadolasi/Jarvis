@@ -3,7 +3,7 @@ import requests
 
 
 @require(network=True)
-@plugin('trivia')
+@plugin("trivia")
 class trivia:
     errCode = "An error occurred. Please try again later."
     """
@@ -17,7 +17,7 @@ class trivia:
         question_type = trivia_fetch["results"][0]["type"]
         options = trivia_fetch["results"][0]["incorrect_answers"]
         if trivia_fetch is not None:
-            if(question_type == "multiple"):
+            if question_type == "multiple":
                 self.mcq_question(jarvis, trivia_fetch)
             else:
                 self.true_false_question(jarvis, trivia_fetch)
@@ -32,12 +32,12 @@ class trivia:
 
     def true_false_question(self, jarvis, trivia_fetch):
         response_code = trivia_fetch["response_code"]
-        if (response_code != 0):
+        if response_code != 0:
             jarvis.say(errCode)
             return
         else:
             question = trivia_fetch["results"][0]["question"]
-            question = question.replace("&quot;", "\"")
+            question = question.replace("&quot;", '"')
             jarvis.say("True/False: " + question)
             options = ["true", "false"]
             correct = trivia_fetch["results"][0]["correct_answer"]
@@ -45,25 +45,25 @@ class trivia:
             self.true_false_answer(jarvis, options, correct)
 
     def true_false_answer(self, jarvis, options, correctAnswer):
-        answerPrompt = "Please enter either \'true\' or \'false\'"
+        answerPrompt = "Please enter either 'true' or 'false'"
         answer = (jarvis.input(answerPrompt + "\n")).lower()
         while answer not in options:
             jarvis.say("Invalid option")
             answer = (jarvis.input(answerPrompt + "\n")).lower()
-        if (answer == correctAnswer):
+        if answer == correctAnswer:
             jarvis.say("Correct!!")
         else:
             jarvis.say("Sorry, that's incorrect")
 
     def mcq_question(self, jarvis, trivia_fetch):
         response_code = trivia_fetch["response_code"]
-        if (response_code != 0):
+        if response_code != 0:
             jarvis.say(errCode)
             return
         else:
             question = trivia_fetch["results"][0]["question"]
-            question = question.replace("&quot;", "\"")
-            question = question.replace('&#039;', "'")
+            question = question.replace("&quot;", '"')
+            question = question.replace("&#039;", "'")
             jarvis.say("Multiple Choice: " + question)
             options = trivia_fetch["results"][0]["incorrect_answers"]
             correct_answer = trivia_fetch["results"][0]["correct_answer"]
@@ -85,7 +85,7 @@ class trivia:
             jarvis.say("Invalid option")
             answer = jarvis.input(answerPrompt + "\n")
         userAnswer = answersDict[answer]
-        if (userAnswer == correctAnswer):
+        if userAnswer == correctAnswer:
             jarvis.say("Correct!!")
         else:
             jarvis.say("Sorry, the correct answer was " + correctAnswer)

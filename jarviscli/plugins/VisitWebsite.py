@@ -29,7 +29,7 @@ class OpenWebsite:
     """
 
     def __call__(self, jarvis, link):
-        inputs = link.split(' ')
+        inputs = link.split(" ")
         self.main_link = inputs[0]
         self.complement = False
         if len(inputs) > 1:
@@ -43,16 +43,16 @@ class OpenWebsite:
             jarvis.say("Sorry, I can't open this link.")
 
     def has_on_saved_links(self):
-        websites_csv = \
-            open(os.path.join(FILE_PATH, "../data/websites.csv"), 'r')
+        websites_csv = open(os.path.join(FILE_PATH, "../data/websites.csv"), "r")
         for website in websites_csv:
             website = website.rstrip()  # remove newline
-            information = website.split(',')
+            information = website.split(",")
             if self.main_link == information[0]:
                 if self.complement:
                     if len(information) > 2:
-                        self.main_link = \
+                        self.main_link = (
                             information[1] + information[2] + self.complement
+                        )
                     else:
                         self.main_link = information[1] + self.complement
                 else:
@@ -73,5 +73,5 @@ class OpenWebsite:
         return True
 
     def fix_link(self):
-        if not self.main_link.startswith('http'):
+        if not self.main_link.startswith("http"):
             self.main_link = "https://" + self.main_link

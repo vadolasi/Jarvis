@@ -14,11 +14,10 @@ class ChuckTest(PluginTest):
         self.test = self.load_plugin(chuck)
 
     def test_main(self):
-        with patch.object(requests, 'get') as get_mock:
+        with patch.object(requests, "get") as get_mock:
             self.test(self.jarvis_api, "")
-            get_mock.assert_called_with(
-                "https://api.chucknorris.io/jokes/random")
+            get_mock.assert_called_with("https://api.chucknorris.io/jokes/random")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

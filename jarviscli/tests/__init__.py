@@ -6,27 +6,29 @@ from collections import deque
 
 class MockJarvisAPI(JarvisAPI):
     def __init__(self):
-        self.call_history = MockHistoryBuilder().\
-            add_field('operation').\
-            add_field('args').\
-            add_field('return').\
-            build()
+        self.call_history = (
+            MockHistoryBuilder()
+            .add_field("operation")
+            .add_field("args")
+            .add_field("return")
+            .build()
+        )
 
-        self.say_history = MockHistoryBuilder().\
-            add_field('text').\
-            add_field('color').\
-            build()
+        self.say_history = (
+            MockHistoryBuilder().add_field("text").add_field("color").build()
+        )
 
-        self.notification_history = MockHistoryBuilder().\
-            add_field('msg').\
-            add_field('time_seconds').\
-            build()
+        self.notification_history = (
+            MockHistoryBuilder().add_field("msg").add_field("time_seconds").build()
+        )
 
-        self.schedule_history = MockHistoryBuilder().\
-            add_field('time_seconds').\
-            add_field('function').\
-            add_field('args').\
-            build()
+        self.schedule_history = (
+            MockHistoryBuilder()
+            .add_field("time_seconds")
+            .add_field("function")
+            .add_field("args")
+            .build()
+        )
 
         self.data = {}
         self._input_queue = deque()
@@ -34,49 +36,50 @@ class MockJarvisAPI(JarvisAPI):
 
     def say(self, text, color=""):
         # remove \n
-        text = text.rstrip('\n')
+        text = text.rstrip("\n")
         self.say_history.record(text, color)
-        self.call_history.record('say', (text, color), None)
+        self.call_history.record("say", (text, color), None)
 
     def queue_input(self, text):
         self._input_queue.append(text)
 
-    def input(self, prompt='', color=''):
+    def input(self, prompt="", color=""):
         if len(self._input_queue) == 0:
-            raise BaseException("MockJarvisAPI: No predefined answer in queue - add answer with 'self.queue_input(\"TEXT\")'")
+            raise BaseException(
+                "MockJarvisAPI: No predefined answer in queue - add answer with 'self.queue_input(\"TEXT\")'"
+            )
         return self._input_queue.popleft()
 
-    def input_number(self, prompt='', color='', rtype=float, rmin=None, rmax=None):
+    def input_number(self, prompt="", color="", rtype=float, rmin=None, rmax=None):
         return JarvisAPI.input_number(self, prompt, color, rtype, rmin, rmax)
 
     def connection_error(self):
-        self.call_history.record('connection_error', (), None)
+        self.call_history.record("connection_error", (), None)
 
     def exit(self):
-        self.call_history.record('exit', (), None)
+        self.call_history.record("exit", (), None)
 
     def notification(self, msg, time_seconds=0):
         self.notification_history.record(msg, time_seconds)
-        self.call_history.record('notification', (msg, time_seconds), None)
+        self.call_history.record("notification", (msg, time_seconds), None)
 
     def schedule(self, time_seconds, function, *args):
         self.notification_history.record(time_seconds, function, *args)
-        self.call_history.record(
-            'schedule', (time_seconds, function, args), None)
+        self.call_history.record("schedule", (time_seconds, function, args), None)
 
     def cancel(self, schedule_id):
-        self.call_history.record('cancel', (), None)
+        self.call_history.record("cancel", (), None)
 
     def enable_voice(self):
-        self.call_history.record('enable_voice', (), None)
+        self.call_history.record("enable_voice", (), None)
         self.is_voice_enabled = True
 
     def disable_voice(self):
-        self.call_history.record('disable_voice', (), None)
+        self.call_history.record("disable_voice", (), None)
         self.is_voice_enabled = False
 
     def is_voice_enabled(self):
-        self.call_history.record('is_voice_enabled', (), self.is_voice_enabled)
+        self.call_history.record("is_voice_enabled", (), self.is_voice_enabled)
         return self.is_voice_enabled
 
     def get_data(self, key):
@@ -84,40 +87,40 @@ class MockJarvisAPI(JarvisAPI):
             value = None
         else:
             value = self.data[key]
-        self.call_history.record('get_data', (key), value)
+        self.call_history.record("get_data", (key), value)
         return value
 
     def add_data(self, key, value):
         self.data[key] = value
-        self.call_history.record('add_data', (key, value), None)
+        self.call_history.record("add_data", (key, value), None)
 
     def update_data(self, key, value):
         self.data[key] = value
-        self.call_history.record('update_data', (key, value), None)
+        self.call_history.record("update_data", (key, value), None)
 
     def del_data(self, key):
         del self.data[key]
-        self.call_history.record('del_data', (key), None)
+        self.call_history.record("del_data", (key), None)
 
     def eval(self, s):
-        self.call_history.record('eval', s)
+        self.call_history.record("eval", s)
 
 
-class MockHistoryBuilder():
+class MockHistoryBuilder:
     def __init__(self):
         self._history = MockHistory()
 
     def add_field(self, field):
         self._history._storage_by_field[field] = []
-        self._history.__dict__[
-            'contains_{}'.format(field)] = partial(
-            self._history.contains, field)
-        self._history.__dict__[
-            'view_{}'.format(field)] = partial(
-            self._history.view, field)
-        self._history.__dict__[
-            'last_{}'.format(field)] = partial(
-            self._history.last, field)
+        self._history.__dict__["contains_{}".format(field)] = partial(
+            self._history.contains, field
+        )
+        self._history.__dict__["view_{}".format(field)] = partial(
+            self._history.view, field
+        )
+        self._history.__dict__["last_{}".format(field)] = partial(
+            self._history.last, field
+        )
         self._history._field_list.append(field)
         return self
 
@@ -125,7 +128,7 @@ class MockHistoryBuilder():
         return self._history
 
 
-class MockHistory():
+class MockHistory:
     """
     Record/Output history.
 
@@ -148,7 +151,8 @@ class MockHistory():
         """
         if len(self._field_list) != len(args):
             raise ValueError(
-                "Argument count miss-match: {} --- {}".format(self._field_list, args))
+                "Argument count miss-match: {} --- {}".format(self._field_list, args)
+            )
         for i, field in enumerate(self._field_list):
             self._storage_by_field[field].append(args[i])
         self._storage_by_index.append(args)
@@ -197,7 +201,7 @@ class PluginTest(unittest.TestCase):
         self._setUp()
 
     def _setUp(self):
-        if 'jarvis_api' not in self.__dict__ or self.jarvis_api is None:
+        if "jarvis_api" not in self.__dict__ or self.jarvis_api is None:
             self.jarvis_api = MockJarvisAPI()
 
     def load_plugin(self, plugin_class):

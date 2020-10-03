@@ -14,11 +14,10 @@ class joke_of_day_test(PluginTest):
         self.test = self.load_plugin(joke_of_day)
 
     def test_get_joke(self):
-        with patch.object(requests, 'get') as get_mock:
+        with patch.object(requests, "get") as get_mock:
             self.test.get_joke(self.jarvis_api)
-            get_mock.assert_called_with(
-                "https://api.jokes.one/jod")
+            get_mock.assert_called_with("https://api.jokes.one/jod")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

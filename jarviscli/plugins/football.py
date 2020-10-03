@@ -4,9 +4,9 @@ from colorama import Fore
 from plugin import plugin, require
 from utilities.animations import SpinnerThread
 
-API_KEY = '1ebd3b92bf5041249f8c1e7a540ce98c'
-url = 'https://api.football-data.org/v2'
-headers = {'X-Auth-Token': API_KEY}
+API_KEY = "1ebd3b92bf5041249f8c1e7a540ce98c"
+url = "https://api.football-data.org/v2"
+headers = {"X-Auth-Token": API_KEY}
 
 
 def fetch(route):
@@ -18,8 +18,8 @@ def fetch(route):
 
 
 @require(network=True)
-@plugin('football')
-class Football():
+@plugin("football")
+class Football:
     """
     Provides football competition information (tournament/league standings) and daily match info.
 
@@ -39,9 +39,9 @@ class Football():
         # Proceed according to option
         if compId is None:
             return
-        if option == 'competitions':
+        if option == "competitions":
             self.competition(jarvis, compId)
-        elif option == 'matches':
+        elif option == "matches":
             self.matches(jarvis, compId)
         print()
 
@@ -50,7 +50,7 @@ class Football():
         Get user input for choosing between
         match info or competition info
         """
-        options = {1: 'competitions', 2: 'matches'}
+        options = {1: "competitions", 2: "matches"}
         # Ask for the option
         jarvis.say("What information do you want:", Fore.BLUE)
         print()
@@ -67,10 +67,14 @@ class Football():
                     return options[option]
                 else:
                     jarvis.say(
-                        "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                        "Invalid input! Enter a number from the choices provided.",
+                        Fore.YELLOW,
+                    )
             except ValueError:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
             print()
 
     def get_competition(self, jarvis):
@@ -78,18 +82,21 @@ class Football():
         Takes input from user for selecting a competition
         """
         # Fetch top-tier competitions
-        jarvis.spinner_start('Fetching ')
+        jarvis.spinner_start("Fetching ")
         r = fetch("/competitions?plan=TIER_ONE")
         if r is None:
-            jarvis.spinner_stop("Error in fetching data - try again later.", Fore.YELLOW)
+            jarvis.spinner_stop(
+                "Error in fetching data - try again later.", Fore.YELLOW
+            )
             return
         comps = r["competitions"]
         jarvis.spinner_stop("Pick a competition:", Fore.BLUE)
         # Print the list of competitions
         print()
         for i in range(r["count"]):
-            print("{}: {}, {}".format(
-                i + 1, comps[i]["name"], comps[i]["area"]["name"]))
+            print(
+                "{}: {}, {}".format(i + 1, comps[i]["name"], comps[i]["area"]["name"])
+            )
         print("0: Exit")
         print()
         # Take input option
@@ -102,10 +109,14 @@ class Football():
                     return comps[option - 1]["id"]
                 else:
                     jarvis.say(
-                        "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                        "Invalid input! Enter a number from the choices provided.",
+                        Fore.YELLOW,
+                    )
             except ValueError:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
             print()
 
     def competition(self, jarvis, compId):
@@ -114,13 +125,15 @@ class Football():
         the competition's current standings
         """
         # Fetch competition info)
-        jarvis.spinner_start('Fetching ')
+        jarvis.spinner_start("Fetching ")
         r = fetch("/competitions/{}/standings".format(compId))
         if r is None:
-            jarvis.spinner_stop("Error in fetching data - try again later.", Fore.YELLOW)
+            jarvis.spinner_stop(
+                "Error in fetching data - try again later.", Fore.YELLOW
+            )
             return
 
-        jarvis.spinner_stop('')
+        jarvis.spinner_stop("")
         print()
         self.printStandings(jarvis, r["standings"])
 
@@ -135,12 +148,15 @@ class Football():
             return
         if tables[0]["group"] is None:
             # League table - print top three
-            jarvis.say("First position:  {}".format(
-                tables[0]["table"][0]["team"]["name"]))
-            jarvis.say("Second position: {}".format(
-                tables[0]["table"][1]["team"]["name"]))
-            jarvis.say("Third position:  {}".format(
-                tables[0]["table"][2]["team"]["name"]))
+            jarvis.say(
+                "First position:  {}".format(tables[0]["table"][0]["team"]["name"])
+            )
+            jarvis.say(
+                "Second position: {}".format(tables[0]["table"][1]["team"]["name"])
+            )
+            jarvis.say(
+                "Third position:  {}".format(tables[0]["table"][2]["team"]["name"])
+            )
             print()
         # General case
         jarvis.say("Here are the full standings: ", Fore.BLUE)
@@ -160,8 +176,23 @@ class Football():
                 team["team"] = team["team"]["name"]
                 stList.append([team[k] for k in team])
             # Print the standings table
-            print(tabulate(stList, headers=[
-                "#", "Team", "P", "W", "D", "L", "Points", "GF", "GA", "GD"]))
+            print(
+                tabulate(
+                    stList,
+                    headers=[
+                        "#",
+                        "Team",
+                        "P",
+                        "W",
+                        "D",
+                        "L",
+                        "Points",
+                        "GF",
+                        "GA",
+                        "GD",
+                    ],
+                )
+            )
             print()
 
     def matches(self, jarvis, compId):
@@ -170,13 +201,15 @@ class Football():
         and prints the match info
         """
         print()
-        jarvis.spinner_start('Fetching ')
+        jarvis.spinner_start("Fetching ")
         r = fetch("/matches?competitions={}".format(compId))
         if r is None:
-            jarvis.spinner_stop("Error in fetching data - try again later.", Fore.YELLOW)
+            jarvis.spinner_stop(
+                "Error in fetching data - try again later.", Fore.YELLOW
+            )
             return
 
-        jarvis.spinner_stop('')
+        jarvis.spinner_stop("")
         if r["count"] == 0:
             jarvis.say("No matches found for today.", Fore.BLUE)
             return
@@ -209,17 +242,14 @@ class Football():
         if status != "SCHEDULED":
             # Get the score after 90 mins ordinary time
             scores = match["score"]
-            homeScore = scores["halfTime"]["homeTeam"] + \
-                scores["fullTime"]["homeTeam"]
-            awayScore = scores["halfTime"]["awayTeam"] + \
-                scores["fullTime"]["awayTeam"]
+            homeScore = scores["halfTime"]["homeTeam"] + scores["fullTime"]["homeTeam"]
+            awayScore = scores["halfTime"]["awayTeam"] + scores["fullTime"]["awayTeam"]
             lines.append("SCORE: {} - {}".format(homeScore, awayScore))
             if scores["extraTime"]["homeTeam"] is not None:
                 # Match went on to extra time
                 homeExtra = scores["extraTime"]["homeTeam"]
                 awayExtra = scores["extraTime"]["awayTeam"]
-                lines.append(
-                    "Extra time: {} - {}".format(homeExtra, awayExtra))
+                lines.append("Extra time: {} - {}".format(homeExtra, awayExtra))
             if scores["penalties"]["homeTeam"] is not None:
                 # Match went on to penalties
                 homePen = scores["penalties"]["homeTeam"]

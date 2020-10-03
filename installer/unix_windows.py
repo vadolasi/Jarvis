@@ -1,13 +1,13 @@
 import os
 
-if os.name == 'nt':
+if os.name == "nt":
     IS_WIN = True
 else:
     IS_WIN = False
 
 
 if IS_WIN:
-    if os.system('py --version') == 0:
+    if os.system("py --version") == 0:
         PY3 = "py -3"
         VIRTUALENV_CMD = "py -3 -m virtualenv"
     else:
@@ -21,7 +21,9 @@ Note that virtualenv must work with Python 3!
 You could do:
 {PY3} -m ensurepip
 {PY3} -m pip install virtualenv
-""".format(PY3=PY3)
+""".format(
+        PY3=PY3
+    )
 
 else:
     PY3 = "python3"

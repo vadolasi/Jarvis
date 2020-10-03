@@ -6,7 +6,7 @@ from Jarvis import Jarvis
 
 class MassconvTest(PluginTest):
     """
-        This class is testing the massconv plugin
+    This class is testing the massconv plugin
     """
 
     def setUp(self):
@@ -166,5 +166,5 @@ class MassconvTest(PluginTest):
         convamount = self.test.mass_convert(Jarvis, amount, from_unit, to_unit)
         self.assertEqual(convamount, 4.40925e-05)
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         unittest.main()

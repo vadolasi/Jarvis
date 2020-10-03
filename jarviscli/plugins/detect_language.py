@@ -31,10 +31,10 @@ def generate_response(jarvis, output):
     score = output[1][0]
     label = output[0][0]
     code_to_lang = open_languages()
-    lang_code = label.split('_')[-1]
+    lang_code = label.split("_")[-1]
     language = code_to_lang[lang_code]
     if score > 0.5:
-        jarvis.say('The language of the text is ' + language, Fore.GREEN)
+        jarvis.say("The language of the text is " + language, Fore.GREEN)
     elif score > 0.25:
         jarvis.say("I'm not sure, but the language might be " + language, Fore.YELLOW)
     else:
@@ -57,6 +57,6 @@ def open_languages():
     Opens a dictionary from code to its corresponding language
     """
     language_path = os.path.join(FILE_PATH, "../data/code_to_lang.json")
-    with open(language_path, 'r') as f:
+    with open(language_path, "r") as f:
         languages = json.load(f)
     return languages

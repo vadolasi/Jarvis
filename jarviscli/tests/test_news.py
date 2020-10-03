@@ -11,5 +11,5 @@ class NewsTest(PluginTest):
         self.assertIsNotNone(n.get_headlines(self.jarvis_api))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

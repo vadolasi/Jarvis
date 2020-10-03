@@ -2,13 +2,15 @@ from plugin import plugin
 from random_word import RandomWords
 
 
-@plugin('hangman')
+@plugin("hangman")
 def hangman(jarvis, s):
-    initialText = "#########################################\n" \
-                  "# Hello Hangman Game Is About To Begin! #\n" \
-                  "#     Guesses Should Be Characters!     #\n" \
-                  "#        Type 'stop' To End Game!       #\n" \
-                  "#########################################\n"
+    initialText = (
+        "#########################################\n"
+        "# Hello Hangman Game Is About To Begin! #\n"
+        "#     Guesses Should Be Characters!     #\n"
+        "#        Type 'stop' To End Game!       #\n"
+        "#########################################\n"
+    )
     print(initialText)
     randomWords = RandomWords()
     terminateFlag = 0
@@ -81,10 +83,12 @@ def hangman(jarvis, s):
         print("Word To Guess Was : " + actualWordToGuess.upper())
         terminateFlag = continueOrNot()
 
-    goodByeText = "#########################################\n" \
-                  "#               Farewell!               #\n" \
-                  "#       May The Force Be With You!      #\n" \
-                  "#########################################\n"
+    goodByeText = (
+        "#########################################\n"
+        "#               Farewell!               #\n"
+        "#       May The Force Be With You!      #\n"
+        "#########################################\n"
+    )
     print(goodByeText)
 
 

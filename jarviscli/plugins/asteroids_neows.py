@@ -3,13 +3,13 @@ from colorama import Fore
 from plugin import plugin, require
 import datetime
 
-API_KEY = '1ebd3b92bf5041249f8c1e7a540ce98c'
-headers = {'X-Auth-Token': API_KEY}
+API_KEY = "1ebd3b92bf5041249f8c1e7a540ce98c"
+headers = {"X-Auth-Token": API_KEY}
 # url = 'https://api.nasa.gov/neo/rest/v1/feed?start_date=2020-07-10&end_date=2020-07-10&api_key=DqXuTRFieGmR5EbdTpPA0tIbDybBhuVmWNerhOdN'
 
 
 @require(network=True)
-@plugin('neows')
+@plugin("neows")
 def neows(jarvis, s):
     option = get_option(jarvis)
     if option == 8:
@@ -20,9 +20,9 @@ def neows(jarvis, s):
 
 
 def print_objects(jarvis, dt):
-    url = 'https://api.nasa.gov/neo/rest/v1/feed?start_date=' + dt
-    url += '&end_date=' + dt
-    url += '&api_key=DqXuTRFieGmR5EbdTpPA0tIbDybBhuVmWNerhOdN'
+    url = "https://api.nasa.gov/neo/rest/v1/feed?start_date=" + dt
+    url += "&end_date=" + dt
+    url += "&api_key=DqXuTRFieGmR5EbdTpPA0tIbDybBhuVmWNerhOdN"
 
     r = fetch(url)
     day = r["near_earth_objects"]
@@ -84,10 +84,13 @@ def get_option(jarvis):
                 return option
             else:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
         except ValueError:
             jarvis.say(
-                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW
+            )
         print()
 
 

@@ -3,12 +3,13 @@ from Jarvis import Jarvis
 
 
 class ParserTest(unittest.TestCase):
-
     def setUp(self):
         self.jarvis = Jarvis()
 
     def test_chuck(self):
-        user_input = "Jarvis, I want to hear a joke about Chuck Norris, can you help me?"
+        user_input = (
+            "Jarvis, I want to hear a joke about Chuck Norris, can you help me?"
+        )
         parsed_input = self.jarvis.parse_input(user_input).split()
         self.assertEqual("joke", parsed_input[0])
 
@@ -35,9 +36,8 @@ class ParserTest(unittest.TestCase):
     def test_near(self):
         user_input = "charities near Valencia"
         parsed_input = self.jarvis.parse_input(user_input).split()
-        self.assertEqual(
-            ["near", "charities", "|", "valencia"], parsed_input[0:])
+        self.assertEqual(["near", "charities", "|", "valencia"], parsed_input[0:])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

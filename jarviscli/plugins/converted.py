@@ -1,8 +1,15 @@
 """
 Plugins not fully converted but simply "wrapped" as plugins.
 """
-from packages import (directions_to, forecast, mapps, near_me,
-                      timeIn, weather_pinpoint, weatherIn)
+from packages import (
+    directions_to,
+    forecast,
+    mapps,
+    near_me,
+    timeIn,
+    weather_pinpoint,
+    weatherIn,
+)
 
 from plugin import plugin, require
 
@@ -82,7 +89,7 @@ def do_umbrella(self, s):
     """If you're leaving your place, Jarvis will inform you if you might need an umbrella or not."""
     self = self._jarvis
 
-    s = 'umbrella'
+    s = "umbrella"
     weather_pinpoint.main(self.memory, self, s)
 
 
@@ -92,12 +99,12 @@ def do_update(jarvis, s):
     location: Updates location.
     system: Updates system.
     """
-    location = jarvis.get_data('city')
+    location = jarvis.get_data("city")
     loc_str = str(location)
     jarvis.say("Your current location is set to " + loc_str)
     jarvis.say("What is your new location?")
     i = jarvis.input()
-    jarvis.update_data('city', i)
+    jarvis.update_data("city", i)
 
 
 @require(network=True)
@@ -107,7 +114,7 @@ def do_weather(self, s):
     self = self._jarvis
 
     word = s.strip()
-    if(len(word) > 1):
+    if len(word) > 1:
         weatherIn.main(self, s)
     else:
         weather_pinpoint.main(self.memory, self, s)

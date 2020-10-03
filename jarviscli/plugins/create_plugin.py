@@ -11,7 +11,7 @@ from plugin import plugin, require, MACOS, LINUX
 and locate the Jarvis/custom folder through relative pathing.
 """
 PLUGINS_PATH = os.path.dirname(os.path.abspath(__file__))
-CUSTOM_PLUGINS_PATH = os.path.join(PLUGINS_PATH, '..', '..', 'custom/')
+CUSTOM_PLUGINS_PATH = os.path.join(PLUGINS_PATH, "..", "..", "custom/")
 
 
 @require(platform=MACOS)
@@ -33,19 +33,22 @@ def create_plugin_MAC(jarvis, s):
     """Checks if file already exists in either the plugins main folder
     or in the custom plugins folder and also asks the user if he wants to exit
     """
-    while(os.path.isfile(CUSTOM_PLUGINS_PATH + filename + ".py") or
-          os.path.isfile(PLUGINS_PATH + "/" + filename + ".py") and
-          not exit):
-        jarvis.say("A plugin with the name '" + filename +
-                   "' already exists", Fore.RED)
-        jarvis.say("Please choose another name or type 'exit' " +
-                   "for obvious results:", Fore.CYAN)
+    while (
+        os.path.isfile(CUSTOM_PLUGINS_PATH + filename + ".py")
+        or os.path.isfile(PLUGINS_PATH + "/" + filename + ".py")
+        and not exit
+    ):
+        jarvis.say("A plugin with the name '" + filename + "' already exists", Fore.RED)
+        jarvis.say(
+            "Please choose another name or type 'exit' " + "for obvious results:",
+            Fore.CYAN,
+        )
 
         new_name = jarvis.input()
-        if new_name == 'exit':
+        if new_name == "exit":
             exit = True
         filename = format_filename(new_name)
-    if(not exit):
+    if not exit:
         """The templated is generated through the create_template funcion
         and is exceuted through the os.system method.
         """
@@ -53,13 +56,16 @@ def create_plugin_MAC(jarvis, s):
         os.system(string)
 
         if file_exists(filename):
-            jarvis.say(filename + ".py created successfully inside " +
-                       "Jarvis/custom", Fore.CYAN)
+            jarvis.say(
+                filename + ".py created successfully inside " + "Jarvis/custom",
+                Fore.CYAN,
+            )
             string = "open " + CUSTOM_PLUGINS_PATH + filename + ".py"
             os.system(string)
         else:
-            jarvis.say("Something went wrong in the creation of the plugin :(",
-                       Fore.RED)
+            jarvis.say(
+                "Something went wrong in the creation of the plugin :(", Fore.RED
+            )
 
 
 # The difference in LINUX is the command used to open the created file
@@ -82,18 +88,22 @@ def create_plugin_LINUX(jarvis, s):
     """Checks if file already exists in either the plugins main folder
     or in the custom plugins folder and also asks the user if he wants to exit
     """
-    while(os.path.isfile(CUSTOM_PLUGINS_PATH + filename + ".py") or
-          os.path.isfile(PLUGINS_PATH + "/" + filename + ".py") and not exit):
-        jarvis.say("A plugin with the name '" + filename +
-                   "' already exists", Fore.RED)
-        jarvis.say("Please choose another name or type 'exit' " +
-                   "for obvious results:", Fore.CYAN)
+    while (
+        os.path.isfile(CUSTOM_PLUGINS_PATH + filename + ".py")
+        or os.path.isfile(PLUGINS_PATH + "/" + filename + ".py")
+        and not exit
+    ):
+        jarvis.say("A plugin with the name '" + filename + "' already exists", Fore.RED)
+        jarvis.say(
+            "Please choose another name or type 'exit' " + "for obvious results:",
+            Fore.CYAN,
+        )
 
         new_name = jarvis.input()
-        if new_name == 'exit':
+        if new_name == "exit":
             exit = True
         filename = format_filename(new_name)
-    if(not exit):
+    if not exit:
         """The plugin is created through the Terminal command "cat"
         and excecuted with the os.System method.
         """
@@ -101,13 +111,16 @@ def create_plugin_LINUX(jarvis, s):
         os.system(string)
 
         if file_exists(filename):
-            jarvis.say(filename + ".py created successfully inside " +
-                       "Jarvis/custom", Fore.CYAN)
+            jarvis.say(
+                filename + ".py created successfully inside " + "Jarvis/custom",
+                Fore.CYAN,
+            )
             string = "xdg-open " + CUSTOM_PLUGINS_PATH + filename + ".py"
             os.system(string)
         else:
-            jarvis.say("Something went wrong in the creation of the plugin :(",
-                       Fore.RED)
+            jarvis.say(
+                "Something went wrong in the creation of the plugin :(", Fore.RED
+            )
 
 
 def file_exists(filename):
@@ -122,29 +135,32 @@ def file_exists(filename):
 
 def format_filename(name):
     """Take a string and return a valid filename constructed from the string.
-Uses a whitelist approach: any characters not present in valid_chars are
-removed. Also spaces are replaced with underscores.
+    Uses a whitelist approach: any characters not present in valid_chars are
+    removed. Also spaces are replaced with underscores.
 
-Note: this method may produce invalid filenames such as ``, `.` or `..`
-When I use this method I prepend a date string like '2009_01_15_19_46_32_'
-and append a file extension like '.txt', so I avoid the potential of using
-an invalid filename.
-"""
+    Note: this method may produce invalid filenames such as ``, `.` or `..`
+    When I use this method I prepend a date string like '2009_01_15_19_46_32_'
+    and append a file extension like '.txt', so I avoid the potential of using
+    an invalid filename."""
     import string
 
     valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-    filename = ''.join(c for c in name if c in valid_chars)
-    filename = filename.replace(' ', '_')  # I don't like spaces in filenames.
+    filename = "".join(c for c in name if c in valid_chars)
+    filename = filename.replace(" ", "_")  # I don't like spaces in filenames.
     return filename
 
 
 def create_template(path, filename):
     """This method is used to format the template of the plugin
-that is being created given the filename and the path
-in which it will be stored.
-"""
-    template = """cd """ + path + """
-            cat >> """ + filename + """.py << EOL
+    that is being created given the filename and the path
+    in which it will be stored."""
+    template = (
+        """cd """
+        + path
+        + """
+            cat >> """
+        + filename
+        + """.py << EOL
 # All plugins should inherite from this library
 from plugin import plugin
 
@@ -165,5 +181,6 @@ def my_plugin(jarvis, s):
 # For more info about plugin development visit:
 # https://github.com/sukeesh/Jarvis/blob/master/doc/PLUGINS.md
 EOL"""
+    )
 
     return template

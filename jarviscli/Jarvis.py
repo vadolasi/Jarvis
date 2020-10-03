@@ -10,10 +10,10 @@ from utilities.GeneralUtilities import print_say
 from CmdInterpreter import CmdInterpreter
 
 # register hist path
-HISTORY_FILENAME = tempfile.TemporaryFile('w+t')
+HISTORY_FILENAME = tempfile.TemporaryFile("w+t")
 
 
-PROMPT_CHAR = '~>'
+PROMPT_CHAR = "~>"
 
 """
     AUTHORS' SCOPE:
@@ -34,32 +34,38 @@ class Jarvis(CmdInterpreter, object):
     # variable used at Breakpoint #1.
     # allows Jarvis say "Hi", only at the first interaction.
     first_reaction_text = ""
-    first_reaction_text += Fore.BLUE + \
-        'Jarvis\' sound is by default disabled.' + Fore.RESET
+    first_reaction_text += (
+        Fore.BLUE + "Jarvis' sound is by default disabled." + Fore.RESET
+    )
     first_reaction_text += "\n"
-    first_reaction_text += Fore.BLUE + 'In order to let Jarvis talk out loud type: '
-    first_reaction_text += Fore.RESET + Fore.RED + 'enable sound' + Fore.RESET
+    first_reaction_text += Fore.BLUE + "In order to let Jarvis talk out loud type: "
+    first_reaction_text += Fore.RESET + Fore.RED + "enable sound" + Fore.RESET
     first_reaction_text += "\n"
-    first_reaction_text += Fore.BLUE + \
-        "Type 'help' for a list of available actions." + Fore.RESET
+    first_reaction_text += (
+        Fore.BLUE + "Type 'help' for a list of available actions." + Fore.RESET
+    )
     first_reaction_text += "\n"
     prompt = (
-        Fore.RED
-        + "{} Hi, what can I do for you?\n".format(PROMPT_CHAR)
-        + Fore.RESET)
+        Fore.RED + "{} Hi, what can I do for you?\n".format(PROMPT_CHAR) + Fore.RESET
+    )
 
     # Used to store user specific data
 
-    def __init__(self, first_reaction_text=first_reaction_text,
-                 prompt=prompt, first_reaction=True,
-                 directories=["jarviscli/plugins", "custom"]):
+    def __init__(
+        self,
+        first_reaction_text=first_reaction_text,
+        prompt=prompt,
+        first_reaction=True,
+        directories=["jarviscli/plugins", "custom"],
+    ):
         directories = self._rel_path_fix(directories)
 
-        if sys.platform == 'win32':
+        if sys.platform == "win32":
             self.use_rawinput = False
-        self.regex_dot = re.compile('\\.(?!\\w)')
-        CmdInterpreter.__init__(self, first_reaction_text, prompt,
-                                directories, first_reaction)
+        self.regex_dot = re.compile("\\.(?!\\w)")
+        CmdInterpreter.__init__(
+            self, first_reaction_text, prompt, directories, first_reaction
+        )
 
     def _rel_path_fix(self, dirs):
         dirs_abs = []
@@ -84,7 +90,7 @@ class Jarvis(CmdInterpreter, object):
     def precmd(self, line):
         """Hook that executes before every command."""
         words = line.split()
-        HISTORY_FILENAME.write(line + '\n')
+        HISTORY_FILENAME.write(line + "\n")
 
         # append calculate keyword to front of leading char digit (or '-') in line
         if words and (words[0].isdigit() or line[0] == "-"):
@@ -108,7 +114,8 @@ class Jarvis(CmdInterpreter, object):
             self.prompt = (
                 Fore.RED
                 + "{} What can I do for you?\n".format(PROMPT_CHAR)
-                + Fore.RESET)
+                + Fore.RESET
+            )
             self.first_reaction = False
         if self.enable_voice:
             self.speech.text_to_speech("What can I do for you?\n")
@@ -135,8 +142,7 @@ class Jarvis(CmdInterpreter, object):
         else:
             # if it doesn't have a fixed response, look if the data corresponds
             # to an action
-            output = self.find_action(
-                data, self._plugin_manager.get_plugins().keys())
+            output = self.find_action(data, self._plugin_manager.get_plugins().keys())
         return output
 
     def find_action(self, data, actions):
@@ -162,9 +168,10 @@ class Jarvis(CmdInterpreter, object):
                 words_remaining.remove(word)
                 # For the 'near' keyword, the words before 'near' are also needed
                 if word == "near":
-                    initial_words = words[:words.index('near')]
-                    output = word + " " +\
-                        " ".join(initial_words + ["|"] + words_remaining)
+                    initial_words = words[: words.index("near")]
+                    output = (
+                        word + " " + " ".join(initial_words + ["|"] + words_remaining)
+                    )
                 elif word == action:  # command name exists
                     action_found = True
                     output = word + " " + " ".join(words_remaining)

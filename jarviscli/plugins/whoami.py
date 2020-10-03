@@ -28,7 +28,7 @@ def whoami(jarvis, s):
             "--user",
             "--zero",
             "--help",
-            "--version"
+            "--version",
         ]
 
         for i in s.split(" "):

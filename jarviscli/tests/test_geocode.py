@@ -48,12 +48,17 @@ class GeocoderTest(PluginTest):
         """
         Test that a mock Response is correctly parsed into output data
         """
-        mock_data = ('{"result": {"addressMatches": [{"matchedAddress":'
-                     '"100 Fake St", "coordinates": {"x": "0", "y": "100"}}]}}')
+        mock_data = (
+            '{"result": {"addressMatches": [{"matchedAddress":'
+            '"100 Fake St", "coordinates": {"x": "0", "y": "100"}}]}}'
+        )
         mock_response = MockResponse(mock_data)
         mock_parsed = self.test_geocoder.parse_response(mock_response)
-        expected_parsed = {'Address matched': '100 Fake St',
-                           'Latitude': '100', 'Longitude': '0'}
+        expected_parsed = {
+            "Address matched": "100 Fake St",
+            "Latitude": "100",
+            "Longitude": "0",
+        }
 
         self.assertEqual(mock_parsed, expected_parsed)
 
@@ -68,5 +73,5 @@ class GeocoderTest(PluginTest):
         self.assertFalse(mock_parsed)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

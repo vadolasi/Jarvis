@@ -7,14 +7,13 @@ from plugin import plugin, alias, require, LINUX
 def find_cached_music(music):
     find = os.popen("ls music -tc")
     music = str(find.readline()).replace("\n", "")
-    music = music.replace(" ", "\\ ").replace(
-        " (", " \\("). replace(")", "\\)")
+    music = music.replace(" ", "\\ ").replace(" (", " \\(").replace(")", "\\)")
     return music
 
 
 @alias("music")
 @require(platform=LINUX)
-@plugin('play')
+@plugin("play")
 def play(jarvis, data):
     """
     Jarvis will find, download and play any song you want
@@ -32,10 +31,7 @@ def play(jarvis, data):
 
         # Try download if not exists
         if not music:
-            os.system(
-                "cd music && instantmusic -s '"
-                + data
-                + "' 2> /dev/null")
+            os.system("cd music && instantmusic -s '" + data + "' 2> /dev/null")
             music = find_cached_music(data)
 
         # Try play if exists
@@ -45,4 +41,5 @@ def play(jarvis, data):
             os.system(
                 "XDG_CURRENT_DESKTOP= DESKTOP_SESSION= xdg-open music/"
                 + music
-                + " 2> /dev/null")
+                + " 2> /dev/null"
+            )

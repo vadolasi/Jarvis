@@ -15,7 +15,7 @@ def numbersapi(jarvis, s):
     """
     parts = s.split(" ")
 
-    if not s or 'help' in parts:
+    if not s or "help" in parts:
         jarvis.say(numbersapi.__doc__, Fore.GREEN)
         return
 

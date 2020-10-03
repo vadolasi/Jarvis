@@ -14,11 +14,10 @@ class CatFactTest(PluginTest):
         self.test = self.load_plugin(cat_fact)
 
     def test_main(self):
-        with patch.object(requests, 'get') as get_mock:
+        with patch.object(requests, "get") as get_mock:
             self.test(self.jarvis_api, "")
-            get_mock.assert_called_with(
-                "https://catfact.ninja/fact")
+            get_mock.assert_called_with("https://catfact.ninja/fact")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

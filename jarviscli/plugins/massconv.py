@@ -2,8 +2,8 @@ from __future__ import division
 from plugin import plugin
 
 
-@plugin('massconv')
-class massconv():
+@plugin("massconv")
+class massconv:
     """
     massconv Documentation.
     massconv is a mass converter.
@@ -26,9 +26,7 @@ class massconv():
         A user can enter both short and full names of the units.
     """
 
-    mass_units = [
-        "mcg", "mg", "g", "kg", "t", "oz", "lb", "st", "cwt"
-    ]
+    mass_units = ["mcg", "mg", "g", "kg", "t", "oz", "lb", "st", "cwt"]
 
     units_data = {
         "mcg2mg": 0.001,
@@ -50,32 +48,34 @@ class massconv():
         "oz": "ounce",
         "lb": "pound",
         "st": "stone",
-        "cwt": "hundredweight"
+        "cwt": "hundredweight",
     }
 
     rev_units = {full: short for short, full in units.items()}
 
     def __call__(self, jarvis, s):
         while True:
-            amount = jarvis.input_number('Enter an amount: ')
-            from_unit = self.get_units(jarvis, 'Enter from which unit: ')
-            to_unit = self.get_units(jarvis, 'Enter to which unit: ')
+            amount = jarvis.input_number("Enter an amount: ")
+            from_unit = self.get_units(jarvis, "Enter from which unit: ")
+            to_unit = self.get_units(jarvis, "Enter to which unit: ")
 
-            if (from_unit != to_unit):
+            if from_unit != to_unit:
                 break
             else:
-                jarvis.say('Please enter different units')
+                jarvis.say("Please enter different units")
 
         convamount = self.mass_convert(jarvis, amount, from_unit, to_unit)
 
         precision = 0
-        if (convamount.is_integer() is False):
+        if convamount.is_integer() is False:
             precision = jarvis.input_number("Please enter precision (max:12): ")
             while True:
-                if (precision.is_integer() and precision <= 12):
+                if precision.is_integer() and precision <= 12:
                     break
                 else:
-                    precision = jarvis.input_number("Please enter an integer (max:12): ")
+                    precision = jarvis.input_number(
+                        "Please enter an integer (max:12): "
+                    )
 
         convamount = round(convamount, int(precision))
 
@@ -90,16 +90,16 @@ class massconv():
             to = self.rev_units[to]
 
         for i in range(len(self.mass_units)):
-            if (self.mass_units[i] == fr):
+            if self.mass_units[i] == fr:
                 start = i
 
-            if (self.mass_units[i] == to):
+            if self.mass_units[i] == to:
                 end = i
 
-        if ((end - start) > 0):
+        if (end - start) > 0:
             reverse = False
 
-        if ((end - start) < 0):
+        if (end - start) < 0:
             reverse = True
             tmp = start
             start = end
@@ -133,21 +133,29 @@ class massconv():
             elif u in self.rev_units:
                 return self.rev_units[u]
             else:
-                prompt = 'Please enter a valid unit: '
+                prompt = "Please enter a valid unit: "
                 continue
 
     def txt_build(self, amount, convamount, from_unit, to_unit):
 
-        if (amount == 1):
+        if amount == 1:
             fromdisp = self.units.get(from_unit)
         else:
             fromdisp = self.units.get(from_unit) + "s"
 
-        if (convamount == 1):
+        if convamount == 1:
             todisp = self.units.get(to_unit)
         else:
             todisp = self.units.get(to_unit) + "s"
 
-        txt = str(amount) + " " + fromdisp + " is equal to " + str(convamount) + " " + todisp
+        txt = (
+            str(amount)
+            + " "
+            + fromdisp
+            + " is equal to "
+            + str(convamount)
+            + " "
+            + todisp
+        )
 
         return txt

@@ -43,16 +43,16 @@ def buy(jarvis, s):
 # Check is shop is supported and creates the url for searching on that shop
 def shop(shopName):
     startingURL = ""
-    if shopName in ('amazon', 'Amazon'):
+    if shopName in ("amazon", "Amazon"):
         startingURL = "https://www.amazon.com/s?k="
-    elif shopName in ('ebay', 'Ebay', 'eBay', 'e-bay'):
+    elif shopName in ("ebay", "Ebay", "eBay", "e-bay"):
         startingURL = "https://www.ebay.com/sch/i.html?_nkw="
     return startingURL
 
 
 # Gets the first part of search url and adds the search term to generate the full url
 def generateURL(startingURL, searchTerm, splitted):
-    if(splitted):
+    if splitted:
         splittedTerm = searchTerm
     else:
         splittedTerm = searchTerm.split(" ")
@@ -63,7 +63,7 @@ def generateURL(startingURL, searchTerm, splitted):
                 startingURL += word
                 counter += 1
             else:
-                startingURL += '+' + word
+                startingURL += "+" + word
                 counter += 1
     return startingURL
 

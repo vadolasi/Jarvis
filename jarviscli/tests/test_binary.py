@@ -32,5 +32,5 @@ class BinaryTest(PluginTest):
         self.assertEqual(self.history_say().last_text(), "-1110001111001")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

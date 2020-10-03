@@ -7,9 +7,11 @@ from pydub import AudioSegment, playback
 
 
 # patch pydup - hide std output
-FNULL = open(os.devnull, 'w')
+FNULL = open(os.devnull, "w")
 _subprocess_call = playback.subprocess.call
-playback.subprocess.call = lambda cmd: _subprocess_call(cmd, stdout=FNULL, stderr=subprocess.STDOUT)
+playback.subprocess.call = lambda cmd: _subprocess_call(
+    cmd, stdout=FNULL, stderr=subprocess.STDOUT
+)
 
 
 if IS_MACOS:
@@ -46,7 +48,7 @@ def remove_ansi_escape_seq(text):
     :return: The text with ANSI escape sequences removed.
     """
     if text:
-        text = re.sub(r'''(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]''', '', text)
+        text = re.sub(r"""(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]""", "", text)
     return text
 
 
@@ -60,24 +62,25 @@ def remove_ansi_escape_seq(text):
 #         https://pyttsx3.readthedocs.io/en/latest/
 #     """
 
-class VoiceGTTS():
+
+class VoiceGTTS:
     def text_to_speech(self, speech):
         speech = remove_ansi_escape_seq(speech)
         tts = gTTS(speech, lang="en")
         tts.save("voice.mp3")
-        audio = AudioSegment.from_mp3('voice.mp3')
+        audio = AudioSegment.from_mp3("voice.mp3")
         playback.play(audio)
         os.remove("voice.mp3")
 
 
-class VoiceMac():
+class VoiceMac:
     def text_to_speech(self, speech):
         speech = remove_ansi_escape_seq(speech)
         speech = speech.replace("'", "\\'")
-        system('say $\'{}\''.format(speech))
+        system("say $'{}'".format(speech))
 
 
-class Voice_general():
+class Voice_general:
     def __init__(self, rate):
         self.rate = rate
         self.min_rate = 50
@@ -86,7 +89,7 @@ class Voice_general():
 
     def create(self):
         self.engine = pyttsx3.init()
-        self.engine.setProperty('rate', self.rate)
+        self.engine.setProperty("rate", self.rate)
 
     def destroy(self):
         """
@@ -108,7 +111,7 @@ class VoiceLinux(Voice_general):
         Instability in the pyttsx3 engine can cause problems if the engine is
         not created and destroyed every time it is used.
         """
-        if speech != '':
+        if speech != "":
             speech = remove_ansi_escape_seq(speech)
             self.create()
             self.engine.say(speech)
@@ -130,8 +133,7 @@ class VoiceLinux(Voice_general):
             self.rate = self.rate + delta
 
 
-class VoiceWin():
-
+class VoiceWin:
     def __init__(self, rate):
         self.rate = rate
         self.min_rate = 50
@@ -140,7 +142,7 @@ class VoiceWin():
 
     def create(self):
         self.engine = pyttsx3.init()
-        self.engine.setProperty('rate', self.rate)
+        self.engine.setProperty("rate", self.rate)
 
     def destroy(self):
         """
@@ -161,9 +163,11 @@ class VoiceWin():
         """
         speech = remove_ansi_escape_seq(speech)
         self.create()
-        self.engine.setProperty('rate', 170)  # setting up new voice rate
-        voices = self.engine.getProperty('voices')  # getting details of current voice
-        self.engine.setProperty('voices', voices[1].id)  # changing index, changes voices. 1 for female
+        self.engine.setProperty("rate", 170)  # setting up new voice rate
+        voices = self.engine.getProperty("voices")  # getting details of current voice
+        self.engine.setProperty(
+            "voices", voices[1].id
+        )  # changing index, changes voices. 1 for female
         self.engine.say(speech)
         self.engine.runAndWait()
         self.destroy()
@@ -184,12 +188,13 @@ class VoiceWin():
             self.rate = self.rate + delta
 
 
-class VoiceNotSupported():
+class VoiceNotSupported:
     def __init__(self):
         self.warning_print = False
 
     def text_to_speech(self, speech):
         if not self.warning_print:
             print(
-                "Speech not supported! Please install pyttsx3 text-to-speech engine (sapi5, nsss or espeak)")
+                "Speech not supported! Please install pyttsx3 text-to-speech engine (sapi5, nsss or espeak)"
+            )
             self.warning_print = True

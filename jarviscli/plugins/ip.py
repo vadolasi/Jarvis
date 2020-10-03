@@ -6,8 +6,8 @@ from plugin import plugin, require, UNIX, WINDOWS
 
 
 @require(platform=UNIX)
-@plugin('ip')
-class IP():
+@plugin("ip")
+class IP:
     """
     Display local and public ip address
     """
@@ -21,7 +21,7 @@ class IP():
         self._public_ip_v6 = "curl -6 ifconfig.co --connect-timeout 10 2> /dev/null || echo 'not available'"
 
     def __call__(self, jarvis, s):
-        if executable_exists('ifconfig'):
+        if executable_exists("ifconfig"):
             self._get_local_ip(jarvis)
             jarvis.say("")
 
@@ -39,7 +39,7 @@ class IP():
 
 
 @require(platform=WINDOWS)
-@plugin('ip')
+@plugin("ip")
 def ip_WIN32(jarvis, s):
     """
     Returns information about IP for windows

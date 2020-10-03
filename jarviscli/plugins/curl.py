@@ -12,7 +12,6 @@ from colorama import Fore
 
 @plugin("generate curl")
 class GenerateCurl(object):
-
     def __call__(self, jarvis, s):
         self._input_params = {}
         self._collect_parameters(jarvis)
@@ -22,7 +21,9 @@ class GenerateCurl(object):
     def _collect_parameters(self, jarvis):
         http_method = jarvis.input(prompt="HTTP Method: ", color=Fore.BLUE)
         jarvis.say(text="Select Content Type\n\n1. JSON\n2. No Data\n")
-        content_type = jarvis.input_number(prompt="Enter you choice: ", color=Fore.BLUE, rtype=int, rmin=1, rmax=2)
+        content_type = jarvis.input_number(
+            prompt="Enter you choice: ", color=Fore.BLUE, rtype=int, rmin=1, rmax=2
+        )
         data = jarvis.input(prompt="Enter / copy the data: ", color=Fore.BLUE)
         endpoint = jarvis.input(prompt="Specify the HTTP endpoint: ", color=Fore.BLUE)
 
@@ -30,7 +31,7 @@ class GenerateCurl(object):
             "method": http_method.upper(),
             "content_type": content_type,
             "data": data,
-            "endpoint": endpoint
+            "endpoint": endpoint,
         }
 
     def _validate_parameters(self, jarvis):
@@ -44,15 +45,22 @@ class GenerateCurl(object):
             jarvis.exit()
 
         if "data" not in self._input_params:
-            jarvis.say(text="Data missing. Could be empty but should be present.", color=Fore.RED)
+            jarvis.say(
+                text="Data missing. Could be empty but should be present.",
+                color=Fore.RED,
+            )
             jarvis.exit()
 
         if "endpoint" not in self._input_params:
             jarvis.say(text="Endpoint missing.", color=Fore.RED)
             jarvis.exit()
 
-        if self._valid_method(jarvis) and self._valid_content_type(jarvis) and \
-           self._valid_data(jarvis) and self._valid_endpoint(jarvis):
+        if (
+            self._valid_method(jarvis)
+            and self._valid_content_type(jarvis)
+            and self._valid_data(jarvis)
+            and self._valid_endpoint(jarvis)
+        ):
             pass
         else:
             jarvis.exit()
@@ -82,7 +90,9 @@ class GenerateCurl(object):
                 json.loads(data)
                 return True
             except ValueError as e:
-                jarvis.say(text="Invalid data format based on content type.", color=Fore.RED)
+                jarvis.say(
+                    text="Invalid data format based on content type.", color=Fore.RED
+                )
                 return False
 
     def _valid_endpoint(self, jarvis):

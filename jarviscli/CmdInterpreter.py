@@ -74,21 +74,24 @@ class JarvisAPI(object):
         """
         while True:
             try:
-                value = rtype(self.input(prompt, color).replace(',', '.'))
-                if (rmin is not None and value < rmin) or (rmax is not None and value > rmax):
+                value = rtype(self.input(prompt, color).replace(",", "."))
+                if (rmin is not None and value < rmin) or (
+                    rmax is not None and value > rmax
+                ):
                     prompt = "Sorry, needs to be between {} and {}. Try again: ".format(
-                        rmin, rmax)
+                        rmin, rmax
+                    )
                 else:
                     return value
             except ValueError:
-                prompt = 'Sorry, needs to be a number. Try again: '
+                prompt = "Sorry, needs to be a number. Try again: "
                 continue
 
     def connection_error(self):
         """Print generic connection error"""
 
         if self.is_spinner_running():
-            self.spinner_stop('')
+            self.spinner_stop("")
 
         self.say(JarvisAPI._CONNECTION_ERROR_MSG)
 
@@ -124,44 +127,43 @@ class JarvisAPI(object):
            - *args
         :return: integer, id - use with cancel
         """
-        return self._jarvis.scheduler.create_event(
-            time_seconds, function, self, *args)
+        return self._jarvis.scheduler.create_event(time_seconds, function, self, *args)
 
     def cancel(self, schedule_id):
         """
         Cancel event scheduled with schedule
         :param schedule_id: id returned by schedule
         """
-        spinner = SpinnerThread('Cancelling', 0.15)
+        spinner = SpinnerThread("Cancelling", 0.15)
         spinner.start()
 
         self._jarvis.scheduler.cancel(schedule_id)
 
         spinner.stop()
-        jarvis.say('Cancellation successful', Fore.GREEN)
+        jarvis.say("Cancellation successful", Fore.GREEN)
 
     # Voice wrapper
     def enable_voice(self):
         """
         Use text to speech for every text passed to jarvis.say()
         """
-        g = self.get_data('gtts_status')
+        g = self.get_data("gtts_status")
         self._jarvis.speech = create_voice(self, g, rate=120)
         self._jarvis.enable_voice = True
-        self.update_data('enable_voice', True)
+        self.update_data("enable_voice", True)
 
     def disable_gtts(self):
         """
         Switch to default speech engine for every text passed to jarvis.say()
         """
-        self.update_data('gtts_status', False)
+        self.update_data("gtts_status", False)
 
     def enable_gtts(self):
         """
         Use google text to speech for every text passed to jarvis.say()
         """
-        self.update_data('gtts_status', True)
-        g = self.get_data('gtts_status')
+        self.update_data("gtts_status", True)
+        g = self.get_data("gtts_status")
         self._jarvis.speech = create_voice(self, g, rate=120)
 
     def disable_voice(self):
@@ -170,7 +172,7 @@ class JarvisAPI(object):
         """
         self.disable_gtts()
         self._jarvis.enable_voice = False
-        self.update_data('enable_voice', False)
+        self.update_data("enable_voice", False)
 
     def is_voice_enabled(self):
         """
@@ -187,7 +189,7 @@ class JarvisAPI(object):
         :param delta: Amount of change to apply to speech rate
         """
         self._jarvis.speech.change_rate(delta)
-        self.update_data('speech_rate', self._jarvis.speech.rate)
+        self.update_data("speech_rate", self._jarvis.speech.rate)
 
     # MEMORY WRAPPER
     def get_data(self, key):
@@ -252,15 +254,16 @@ class JarvisAPI(object):
         """
         while True:
             user_choice = self.input(
-                'Would you like to save the file in the same folder?[y/n] ')
+                "Would you like to save the file in the same folder?[y/n] "
+            )
             user_choice = user_choice.lower()
 
-            if user_choice == 'yes' or user_choice == 'y':
+            if user_choice == "yes" or user_choice == "y":
                 destination = get_parent_directory(path)
                 break
 
-            elif user_choice == 'no' or user_choice == 'n':
-                destination = self.input('Enter the folder destination: ')
+            elif user_choice == "no" or user_choice == "n":
+                destination = self.input("Enter the folder destination: ")
                 if not os.path.exists(destination):
                     os.makedirs(destination)
                 break
@@ -290,13 +293,12 @@ def catch_all_exceptions(do, pass_self=True):
         except Exception:
             if self._api.is_spinner_running():
                 self.spinner_stop("It seems some error has occured")
-            print(
-                Fore.RED
-                + "Some error occurred, please open an issue on github!")
+            print(Fore.RED + "Some error occurred, please open an issue on github!")
             print("Here is error:")
-            print('')
+            print("")
             traceback.print_exc()
             print(Fore.RESET)
+
     return try_do
 
 
@@ -308,11 +310,8 @@ class CmdInterpreter(Cmd):
     # This can be used to store user specific data
 
     def __init__(
-            self,
-            first_reaction_text,
-            prompt,
-            directories=[],
-            first_reaction=True):
+        self, first_reaction_text, prompt, directories=[], first_reaction=True
+    ):
         """
         This constructor contains a dictionary with Jarvis Actions (what Jarvis can do).
         In alphabetically order.
@@ -330,8 +329,8 @@ class CmdInterpreter(Cmd):
         self.say = self._api.say
 
         # Remember voice settings
-        self.enable_voice = self._api.get_data('enable_voice')
-        self.speech_rate = self._api.get_data('speech_rate')
+        self.enable_voice = self._api.get_data("enable_voice")
+        self.speech_rate = self._api.get_data("speech_rate")
 
         if not self.speech_rate:
             self.speech_rate = 120
@@ -339,16 +338,16 @@ class CmdInterpreter(Cmd):
         # what if the platform does not have any engines, travis doesn't have sapi5 acc to me
 
         try:
-            gtts_status = self._api.get_data('gtts_status')
-            self.speech = create_voice(
-                self, gtts_status, rate=self.speech_rate)
+            gtts_status = self._api.get_data("gtts_status")
+            self.speech = create_voice(self, gtts_status, rate=self.speech_rate)
         except Exception as e:
             self.say("Voice not supported", Fore.RED)
             self.say(str(e), Fore.RED)
 
-        self.fixed_responses = {"what time is it": "clock",
-                                "where am i": "pinpoint",
-                                }
+        self.fixed_responses = {
+            "what time is it": "clock",
+            "where am i": "pinpoint",
+        }
 
         self._plugin_manager = PluginManager()
 
@@ -366,16 +365,15 @@ class CmdInterpreter(Cmd):
             "enabled": self._plugin_manager.get_number_plugins_loaded(),
             "red": Fore.RED,
             "blue": Fore.BLUE,
-            "reset": Fore.RESET
+            "reset": Fore.RESET,
         }
 
         plugin_status = "{red}{enabled} {blue}plugins loaded"
-        if plugin_status_formatter['disabled'] > 0:
+        if plugin_status_formatter["disabled"] > 0:
             plugin_status += " {red}{disabled} {blue}plugins disabled. More information: {red}status\n"
         plugin_status += Fore.RESET
 
-        self.first_reaction_text += plugin_status.format(
-            **plugin_status_formatter)
+        self.first_reaction_text += plugin_status.format(**plugin_status_formatter)
 
     def _activate_plugins(self):
         """Generate do_XXX, help_XXX and (optionally) complete_XXX functions"""
@@ -383,19 +381,12 @@ class CmdInterpreter(Cmd):
             self._plugin_update_completion(plugin, plugin_name)
 
             run_catch = catch_all_exceptions(plugin.run)
-            setattr(
-                CmdInterpreter,
-                "do_"
-                + plugin_name,
-                partial(
-                    run_catch,
-                    self))
+            setattr(CmdInterpreter, "do_" + plugin_name, partial(run_catch, self))
             setattr(
                 CmdInterpreter,
                 "help_" + plugin_name,
-                partial(
-                    self._api.say,
-                    plugin.get_doc()))
+                partial(self._api.say, plugin.get_doc()),
+            )
 
             plugin.init(self._api)
 
@@ -403,15 +394,14 @@ class CmdInterpreter(Cmd):
         """Return True if completion is available"""
         completions = [i for i in plugin.complete()]
         if len(completions) > 0:
+
             def complete(completions):
                 def _complete_impl(self, text, line, begidx, endidx):
                     return [i for i in completions if i.startswith(text)]
+
                 return _complete_impl
-            setattr(
-                CmdInterpreter,
-                "complete_"
-                + plugin_name,
-                complete(completions))
+
+            setattr(CmdInterpreter, "complete_" + plugin_name, complete(completions))
 
     def get_api(self):
         return self._api
@@ -419,9 +409,9 @@ class CmdInterpreter(Cmd):
     def close(self):
         """Closing Jarvis."""
 
-        '''Stop the spinner if it is already running'''
+        """Stop the spinner if it is already running"""
         if self._api.is_spinner_running():
-            self._api.spinner_stop('Some error has occured')
+            self._api.spinner_stop("Some error has occured")
 
         self.say("Goodbye, see you later!", Fore.RED)
         self.scheduler.stop_all()
@@ -445,16 +435,14 @@ class CmdInterpreter(Cmd):
         count_disabled = len(self._plugin_manager.get_disabled())
         self.say(
             "{} Plugins enabled, {} Plugins disabled.".format(
-                count_enabled,
-                count_disabled))
+                count_enabled, count_disabled
+            )
+        )
 
         if "short" not in s and count_disabled > 0:
             self.say("")
             for disabled, reason in self._plugin_manager.get_disabled().items():
-                self.say(
-                    "{:<20}: {}".format(
-                        disabled,
-                        " OR ".join(reason)))
+                self.say("{:<20}: {}".format(disabled, " OR ".join(reason)))
 
     def do_help(self, arg):
         if arg:
@@ -469,15 +457,15 @@ class CmdInterpreter(Cmd):
             uniquePlugins = {}
             for key in pluginDict.keys():
                 plugin = pluginDict[key]
-                if(plugin not in uniquePlugins.keys()):
+                if plugin not in uniquePlugins.keys():
                     uniquePlugins[plugin.get_name()] = plugin
             helpOutput = []
             for name in sorted(uniquePlugins.keys()):
-                if (name == "help"):
+                if name == "help":
                     continue
                 try:
                     aliasString = ", ".join(uniquePlugins[name].alias())
-                    if (aliasString != ""):
+                    if aliasString != "":
                         pluginOutput = "* " + name + " (" + aliasString + ")"
                         helpOutput.append(pluginOutput)
                     else:
@@ -489,4 +477,4 @@ class CmdInterpreter(Cmd):
 
     def help_status(self):
         self.say("Prints info about enabled or disabled plugins")
-        self.say("Use \"status short\" to omit detailed information.")
+        self.say('Use "status short" to omit detailed information.')

@@ -14,12 +14,14 @@ def next_pi(jarvis, s):
 
     # print(today)
 
-    pi_file = open(os.path.join(FILE_PATH, '../data/pi.txt'), 'r')
+    pi_file = open(os.path.join(FILE_PATH, "../data/pi.txt"), "r")
     pi_number = pi_file.read()
     index = 4
     while True:
-        user_input = jarvis.input("Enter \'n\' to print next {} digits : ".format(str(NUM_NEXT)))
-        if (user_input != 'n'):
+        user_input = jarvis.input(
+            "Enter 'n' to print next {} digits : ".format(str(NUM_NEXT))
+        )
+        if user_input != "n":
             break
-        jarvis.say(pi_number[index: index + NUM_NEXT], Fore.GREEN)
+        jarvis.say(pi_number[index : index + NUM_NEXT], Fore.GREEN)
         index += NUM_NEXT

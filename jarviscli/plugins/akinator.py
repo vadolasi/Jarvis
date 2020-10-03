@@ -19,10 +19,10 @@ def akinator_main(jarvis, s):
     jarvis.say('Press "g" to start, or "q" to quit !')
     while True:
         user_in = jarvis.input()
-        if user_in == 'q':
+        if user_in == "q":
             jarvis.say("See you next time :D", Fore.CYAN)
             break
-        elif user_in == 'g':
+        elif user_in == "g":
             main_game(jarvis)
             break
         else:
@@ -33,17 +33,19 @@ def akinator_main(jarvis, s):
 
 
 def opening_message(jarvis):
-    ''' Messages displayed when akinator called '''
+    """ Messages displayed when akinator called """
 
-    jarvis.say('')
-    jarvis.say('Let\'s play !')
-    jarvis.say('You have to think of a public personality, answer to some questions and I will try to guess who it is !')
-    jarvis.say('Rules: ')
+    jarvis.say("")
+    jarvis.say("Let's play !")
+    jarvis.say(
+        "You have to think of a public personality, answer to some questions and I will try to guess who it is !"
+    )
+    jarvis.say("Rules: ")
     print_help(jarvis)
 
 
 def main_game(jarvis):
-    ''' Handling of the akinator library '''
+    """ Handling of the akinator library """
 
     aki = akinator.Akinator()
     try:
@@ -74,15 +76,21 @@ def main_game(jarvis):
             try:
                 q = aki.answer(a)
             except akinator.InvalidAnswerError:
-                jarvis.say("answer not understood, type \"h\" for help", Fore.MAGENTA)
+                jarvis.say('answer not understood, type "h" for help', Fore.MAGENTA)
 
     aki.win()
 
-    imageViewerFromCommandLine = {'linux': 'xdg-open',
-                                  'win32': 'explorer',
-                                  'darwin': 'open'}[sys.platform]  # get an image Viewer
+    imageViewerFromCommandLine = {
+        "linux": "xdg-open",
+        "win32": "explorer",
+        "darwin": "open",
+    }[
+        sys.platform
+    ]  # get an image Viewer
     try:
-        subprocess.run([imageViewerFromCommandLine, aki.picture])  # display image of answer
+        subprocess.run(
+            [imageViewerFromCommandLine, aki.picture]
+        )  # display image of answer
     except Exception:
         pass
     correct = jarvis.input(f"It's {aki.name} ({aki.description})! Was I correct?\n\t")
@@ -93,11 +101,11 @@ def main_game(jarvis):
 
 
 def print_help(jarvis):
-    ''' Print help '''
+    """ Print help """
     jarvis.say("To answer, you have the following options: ", Fore.GREEN)
-    jarvis.say("\t \"yes\" or \"y\" or \"0\" for YES", Fore.GREEN)
-    jarvis.say("\t \"no\" or \"n\" or \"1\" for NO", Fore.GREEN)
-    jarvis.say("\t \"i\" or \"idk\" or \"i dont know\" or \"2\" for I DON\'T KNOW", Fore.GREEN)
-    jarvis.say("\t \"probably\" or \"p\" or \"3\" for PROBABLY", Fore.GREEN)
-    jarvis.say("\t \"probably not\" or \"pn\" or \"4\" for PROBABLY NOT", Fore.GREEN)
-    jarvis.say("\t \"q\" to QUIT", Fore.GREEN)
+    jarvis.say('\t "yes" or "y" or "0" for YES', Fore.GREEN)
+    jarvis.say('\t "no" or "n" or "1" for NO', Fore.GREEN)
+    jarvis.say('\t "i" or "idk" or "i dont know" or "2" for I DON\'T KNOW', Fore.GREEN)
+    jarvis.say('\t "probably" or "p" or "3" for PROBABLY', Fore.GREEN)
+    jarvis.say('\t "probably not" or "pn" or "4" for PROBABLY NOT', Fore.GREEN)
+    jarvis.say('\t "q" to QUIT', Fore.GREEN)

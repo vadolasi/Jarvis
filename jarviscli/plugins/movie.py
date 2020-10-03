@@ -16,7 +16,7 @@ def main(jarvis, movie):
 
 @lru_cache(maxsize=50, typed=False)
 def search_movie(jarvis, movie, all_results=False):
-    if movie == '':
+    if movie == "":
         jarvis.say("Please add movie name!", Fore.RED)
         return None
     results = app.search_movie(movie, results=10)
@@ -36,103 +36,103 @@ def get_movie_by_id(movie_id):
 
 
 @require(network=True)
-@plugin('movie cast')
+@plugin("movie cast")
 def movie_cast(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        for d in data['cast']:
-            jarvis.say(d['name'])
+        for d in data["cast"]:
+            jarvis.say(d["name"])
 
 
 @require(network=True)
-@plugin('movie director')
+@plugin("movie director")
 def movie_director(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        for d in data['director']:
-            jarvis.say(d['name'])
+        for d in data["director"]:
+            jarvis.say(d["name"])
 
 
 @require(network=True)
-@plugin('movie plot')
+@plugin("movie plot")
 def movie_plot(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        if 'plot outline' in data:
-            jarvis.say('Plot outline:', Fore.GREEN)
-            jarvis.say(data['plot outline'])
-            jarvis.say('')
-        if 'plot' in data:
-            jarvis.say('Plot:', Fore.GREEN)
-            for d in data['plot']:
+        if "plot outline" in data:
+            jarvis.say("Plot outline:", Fore.GREEN)
+            jarvis.say(data["plot outline"])
+            jarvis.say("")
+        if "plot" in data:
+            jarvis.say("Plot:", Fore.GREEN)
+            for d in data["plot"]:
                 jarvis.say(d)
 
 
 @require(network=True)
-@plugin('movie producer')
+@plugin("movie producer")
 def movie_producer(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        for d in data['producers']:
-            jarvis.say(d['name'])
+        for d in data["producers"]:
+            jarvis.say(d["name"])
 
 
 @require(network=True)
-@plugin('movie rating')
+@plugin("movie rating")
 def movie_rating(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        jarvis.say(str(data['rating']))
+        jarvis.say(str(data["rating"]))
 
 
 @require(network=True)
-@plugin('movie year')
+@plugin("movie year")
 def movie_year(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        jarvis.say(str(data['year']))
+        jarvis.say(str(data["year"]))
 
 
 @require(network=True)
-@plugin('movie runtime')
+@plugin("movie runtime")
 def movie_runtime(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        if 'runtimes' in data:
-            jarvis.say(str(data['runtimes'][0]) + ' minutes')
+        if "runtimes" in data:
+            jarvis.say(str(data["runtimes"][0]) + " minutes")
         else:
             jarvis.say("No runtime data present")
 
 
 @require(network=True)
-@plugin('movie countries')
+@plugin("movie countries")
 def movie_countries(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        for d in data['countries']:
+        for d in data["countries"]:
             jarvis.say(str(d))
 
 
 @require(network=True)
-@plugin('movie genres')
+@plugin("movie genres")
 def movie_genres(jarvis, movie):
     """"""
     data = main(jarvis, movie)
     if data is not None:
-        for d in data['genres']:
+        for d in data["genres"]:
             jarvis.say(d)
 
 
 @require(network=True)
-@plugin('movie info')
+@plugin("movie info")
 def movie_info(jarvis, movie):
     """
     Display table with various information
@@ -144,7 +144,7 @@ def movie_info(jarvis, movie):
 
 
 @require(network=True)
-@plugin('movie search')
+@plugin("movie search")
 def movie_search(jarvis, movie):
     """ search for a movie on IMDB"""
     results = search_movie(jarvis, movie, all_results=True)
@@ -156,7 +156,7 @@ def movie_search(jarvis, movie):
     # get only movies from the results, filtering out TV series, etc
     movie_results = []
     for item in results:
-        if item['kind'] == 'movie':
+        if item["kind"] == "movie":
             movie_results.append(item)
 
     if len(movie_results) > 5:
@@ -164,36 +164,36 @@ def movie_search(jarvis, movie):
     else:
         count = len(movie_results)
 
-    jarvis.say('')
-    space = ' '
-    text = 'ID'
-    text += space * 3 + 'Movie title'
+    jarvis.say("")
+    space = " "
+    text = "ID"
+    text += space * 3 + "Movie title"
     jarvis.say(text, Fore.GREEN)
 
     for i in range(count):
         item = movie_results[i]
         text = Fore.GREEN + str(i + 1) + space * 4
-        text += Fore.RESET + item['smart long imdb canonical title']
+        text += Fore.RESET + item["smart long imdb canonical title"]
         jarvis.say(text)
 
-    jarvis.say('')
-    jarvis.say('Please enter ID to know more(q - quit):')
+    jarvis.say("")
+    jarvis.say("Please enter ID to know more(q - quit):")
 
     input_id = jarvis.input()
 
     # If nothing is entered, just return
-    if input_id == '':
+    if input_id == "":
         return None
     if len(input_id) != 1:
-        return jarvis.say(Fore.RED + 'Please enter valid value')
-    elif input_id in '123456789':
+        return jarvis.say(Fore.RED + "Please enter valid value")
+    elif input_id in "123456789":
         input_id = int(input_id)
-    elif input_id == 'q':
+    elif input_id == "q":
         return None
 
     # if entered input is out of the given list of ID's
     if (int(input_id) > count) or (int(input_id) < 1):
-        return jarvis.say(Fore.RED + 'Please enter id from the given list')
+        return jarvis.say(Fore.RED + "Please enter id from the given list")
 
     movie_id = movie_results[input_id - 1].movieID
     data = get_movie_by_id(movie_id)
@@ -213,25 +213,24 @@ def get_movie_info(jarvis, data):
     """
     Takes a movie attributes as input and prints them accordingly
     """
-    jarvis.say('')
-    jarvis.say(
-        'What type of information do you want: cast, producers, genres, etc.?')
-    jarvis.say('Write one after another separated by space, please:')
+    jarvis.say("")
+    jarvis.say("What type of information do you want: cast, producers, genres, etc.?")
+    jarvis.say("Write one after another separated by space, please:")
 
     movie_attributes = jarvis.input()
     movie_attributes = movie_attributes.split()
-    jarvis.say('')
+    jarvis.say("")
 
     for attribute in movie_attributes:
         if attribute in data:
             value = data[attribute]
 
-            if attribute == 'genres':
-                value = ', '.join(value)
+            if attribute == "genres":
+                value = ", ".join(value)
 
-            if attribute == 'cast':
-                lst = [person['name'] for person in value]
-                value = ', '.join(lst[0:3])
+            if attribute == "cast":
+                lst = [person["name"] for person in value]
+                value = ", ".join(lst[0:3])
 
             if isinstance(value, list):
                 value = value[0]
@@ -239,12 +238,11 @@ def get_movie_info(jarvis, data):
             jarvis.say(colorized_output(attribute.capitalize(), str(value)))
         else:
             jarvis.say(
-                colorized_output(
-                    attribute.capitalize(),
-                    'no information retrieved'))
+                colorized_output(attribute.capitalize(), "no information retrieved")
+            )
 
     # print IMDB url of the movie
 
-    movie_url = app.urls['movie_base'] + 'tt' + data.movieID
-    jarvis.say(colorized_output('IMDB url', movie_url))
-    jarvis.say('')
+    movie_url = app.urls["movie_base"] + "tt" + data.movieID
+    jarvis.say(colorized_output("IMDB url", movie_url))
+    jarvis.say("")

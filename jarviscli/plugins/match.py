@@ -3,8 +3,8 @@ from colorama import Fore
 from plugin import plugin, require
 
 
-@require(native='grep')
-@plugin('match')
+@require(native="grep")
+@plugin("match")
 def match(jarvis, string):
     """
     Matches a string pattern in a file using regex.

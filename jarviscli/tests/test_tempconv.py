@@ -47,5 +47,5 @@ class TestTempconv(PluginTest):
         self.assertEqual(self.test.convert_f_to_c(212), 100.0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

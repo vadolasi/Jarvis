@@ -17,7 +17,7 @@ def main():
     jarvis.executor(command)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if check_python_version():
         main()
     else:

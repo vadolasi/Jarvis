@@ -24,8 +24,11 @@ def read_file(name, default=None):
         except ValueError:
             print(
                 Fore.RED
-                + "Storage file not in right format. Backup stored as {0}.bak".format(name)
-                + Fore.RESET)
+                + "Storage file not in right format. Backup stored as {0}.bak".format(
+                    name
+                )
+                + Fore.RESET
+            )
             os.rename(name, name + ".bak")
     return default
 

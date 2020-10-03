@@ -41,7 +41,9 @@ class RemindTodoBase:
         except json.decoder.JSONDecodeError:
             jarvis.say(
                 "Could not read Remind / Todo List. Sorry, \
-                        that should not have happend...", Fore.RED)
+                        that should not have happend...",
+                Fore.RED,
+            )
             remind_todo_json = "[]"
             jarvis.update_data(self.get_key(), remind_todo_json)
             remind_todo_list = json.loads(remind_todo_json)
@@ -82,7 +84,7 @@ class RemindTodoBase:
         for entry in data:
             ask_str.append(self.format(jarvis, entry))
 
-        title = 'Please choose task to remove (select with space)'
+        title = "Please choose task to remove (select with space)"
         selected = pick(ask_str, title, multi_select=True)
         selected = [entry[1] for entry in selected]
 
@@ -97,9 +99,9 @@ class RemindTodoBase:
         self.save_data(jarvis, new_data)
 
     def modify(self, jarvis, modified_entry):
-        modified_id = modified_entry['id']
+        modified_id = modified_entry["id"]
         data = self.get_data(jarvis)
-        data = [entry for entry in data if entry['id'] != modified_id]
+        data = [entry for entry in data if entry["id"] != modified_id]
         data.append(modified_entry)
         self.save_data(jarvis, data)
 
@@ -126,10 +128,10 @@ class TodoBase(RemindTodoBase):
         data = self.get_data(jarvis)
         next_id = self.get_next_id(jarvis)
         new_entry = {
-            'message': message,
-            'progress': progress,
-            'priority': priority,
-            'id': next_id
+            "message": message,
+            "progress": progress,
+            "priority": priority,
+            "id": next_id,
         }
         data.append(new_entry)
         self.save_data(jarvis, data)
@@ -138,15 +140,15 @@ class TodoBase(RemindTodoBase):
         self.interact().clean_up_entry(jarvis, entry)
 
     def format(self, jarvis, entry):
-        message = entry['message']
+        message = entry["message"]
         schedule = self.interact().format_interact(jarvis, entry)
-        progress = entry['progress']
-        if progress != '':
-            progress = ' -- {} -- '.format(progress)
+        progress = entry["progress"]
+        if progress != "":
+            progress = " -- {} -- ".format(progress)
         return "{}{}{}".format(message, progress, schedule)
 
     def sort(self, todo_list):
-        return sorted(todo_list, key=lambda entry: entry['priority'])
+        return sorted(todo_list, key=lambda entry: entry["priority"])
 
     def select_one_remind(self, jarvis):
         data = self.get_data(jarvis)
@@ -157,7 +159,7 @@ class TodoBase(RemindTodoBase):
         if len(ask_str) == 0:
             return None
 
-        title = 'Please choose from todo list:'
+        title = "Please choose from todo list:"
         _, index = pick(ask_str, title)
 
         return data[index]
@@ -185,55 +187,53 @@ class RemindBase(RemindTodoBase):
     def first_time_init(self, jarvis):
         remind_still_active = []
         for item in self.get_data(jarvis):
-            timestamp = item['timestamp']
+            timestamp = item["timestamp"]
             if timestamp < time.time():
                 time_format = self.timestamp_to_string(timestamp)
                 jarvis.say(
-                    "Reminder: {} missed ({})".format(
-                        item['message'], time_format), Fore.MAGENTA)
+                    "Reminder: {} missed ({})".format(item["message"], time_format),
+                    Fore.MAGENTA,
+                )
                 continue
 
-            schedule_id = jarvis.schedule(timestamp, self.reminder_exec,
-                                          item['message'])
-            item['schedule_id'] = schedule_id
+            schedule_id = jarvis.schedule(
+                timestamp, self.reminder_exec, item["message"]
+            )
+            item["schedule_id"] = schedule_id
             remind_still_active += [item]
         self.save_data(jarvis, remind_still_active)
 
     def add(
-            self,
-            jarvis,
-            message,
-            timestamp=None,
-            schedule_id=None,
-            todo_refere_id=None):
+        self, jarvis, message, timestamp=None, schedule_id=None, todo_refere_id=None
+    ):
         data = self.get_data(jarvis)
         next_id = self.get_next_id(jarvis)
         new_entry = {
-            'message': message,
-            'timestamp': timestamp,
-            'schedule_id': schedule_id,
-            'todo_refere_id': todo_refere_id,
-            'id': next_id
+            "message": message,
+            "timestamp": timestamp,
+            "schedule_id": schedule_id,
+            "todo_refere_id": todo_refere_id,
+            "id": next_id,
         }
         new_data = data + [new_entry]
         self.save_data(jarvis, new_data)
 
     def clean_up_entry(self, jarvis, entry):
-        jarvis.cancel(entry['schedule_id'])
+        jarvis.cancel(entry["schedule_id"])
 
     def format(self, jarvis, entry):
-        time = self.timestamp_to_string(entry['timestamp'])
+        time = self.timestamp_to_string(entry["timestamp"])
         additional = self.interact().format_interact(jarvis, entry)
-        return "{} => {}{}".format(time, entry['message'], additional)
+        return "{} => {}{}".format(time, entry["message"], additional)
 
     def sort(self, remind_list):
-        return sorted(remind_list, key=lambda entry: entry['timestamp'])
+        return sorted(remind_list, key=lambda entry: entry["timestamp"])
 
     def reminder_exec(self, jarvis, schedule_id, message):
         jarvis.notification(message)
 
         data = self.get_data(jarvis)
-        data = [entry for entry in data if entry['schedule_id'] != schedule_id]
+        data = [entry for entry in data if entry["schedule_id"] != schedule_id]
         self.save_data(jarvis, data)
 
     def timestamp_to_string(self, timestamp):
@@ -263,21 +263,25 @@ class RemindBase(RemindTodoBase):
         notification_message = message
 
         todo_refere_id = None
-        if message == 'todo':
-            message = ''
+        if message == "todo":
+            message = ""
             todo_refere_entry = self.interact().select_one_remind(jarvis)
             if todo_refere_entry is None:
                 jarvis.say("Nothing selected", Fore.MAGENTA)
                 return
-            notification_message = todo_refere_entry['message']
+            notification_message = todo_refere_entry["message"]
             notification_message = "TODO: {}".format(notification_message)
-            todo_refere_id = todo_refere_entry['id']
+            todo_refere_id = todo_refere_entry["id"]
 
         # schedule
-        schedule_id = jarvis.schedule(time_in, self.reminder_exec,
-                                      notification_message)
-        self.add(jarvis, message, timestamp=timestamp, schedule_id=schedule_id,
-                 todo_refere_id=todo_refere_id)
+        schedule_id = jarvis.schedule(time_in, self.reminder_exec, notification_message)
+        self.add(
+            jarvis,
+            message,
+            timestamp=timestamp,
+            schedule_id=schedule_id,
+            todo_refere_id=todo_refere_id,
+        )
 
 
 class RemindTodoInteract_Todo:
@@ -285,12 +289,12 @@ class RemindTodoInteract_Todo:
         self.remind = RemindBase()
 
     def clean_up_entry(self, jarvis, entry):
-        todo_id = entry['id']
+        todo_id = entry["id"]
         remind_list = self.remind.get_data(jarvis)
         remind_list_new = []
         modify = False
         for entry in remind_list:
-            refere = entry['todo_refere_id']
+            refere = entry["todo_refere_id"]
             if refere is not None and refere == todo_id:
                 self.remind.clean_up_entry(jarvis, entry)
                 modify = True
@@ -301,15 +305,18 @@ class RemindTodoInteract_Todo:
             self.remind.save_data(jarvis, remind_list_new)
 
     def format_interact(self, jarvis, entry):
-        todo_id = entry['id']
+        todo_id = entry["id"]
         remind_list = self.remind.get_data(jarvis)
-        remind_list = [remind for remind in remind_list
-                       if remind['todo_refere_id'] == todo_id]
+        remind_list = [
+            remind for remind in remind_list if remind["todo_refere_id"] == todo_id
+        ]
         if len(remind_list) != 0:
-            remind_list = [self.remind.timestamp_to_string(remind['timestamp'])
-                           for remind in remind_list]
-            return " -- remind -- ({})".format(', '.join(remind_list))
-        return ''
+            remind_list = [
+                self.remind.timestamp_to_string(remind["timestamp"])
+                for remind in remind_list
+            ]
+            return " -- remind -- ({})".format(", ".join(remind_list))
+        return ""
 
 
 class RemindTodoInteract_Remind:
@@ -320,15 +327,15 @@ class RemindTodoInteract_Remind:
         pass
 
     def format_interact(self, jarvis, entry):
-        todo_refere_id = entry['todo_refere_id']
+        todo_refere_id = entry["todo_refere_id"]
         if todo_refere_id is not None:
             todo_list = self.todo.get_data(jarvis)
-            todo = [todo for todo in todo_list if todo['id'] == todo_refere_id]
+            todo = [todo for todo in todo_list if todo["id"] == todo_refere_id]
             if len(todo) != 1:
                 return "ERROR"
             else:
                 todo = todo[0]
-            return "ToDo ->-> {}".format(todo['message'])
+            return "ToDo ->-> {}".format(todo["message"])
         else:
             return ""
 
@@ -337,7 +344,7 @@ class RemindTodoInteract_Remind:
 
 
 # ##################### PLUGIN DEFINITION ##########################
-@plugin('todo')
+@plugin("todo")
 class Todo(TodoBase):
     """
     List todo list
@@ -351,7 +358,7 @@ class Todo(TodoBase):
         self.do_print(jarvis)
 
 
-@plugin('todo add')
+@plugin("todo add")
 class Todo_Add(TodoBase):
     """Add new todo entry"""
 
@@ -359,7 +366,7 @@ class Todo_Add(TodoBase):
         self.add(jarvis, s)
 
 
-@plugin('todo remove')
+@plugin("todo remove")
 class Todo_Remove(TodoBase):
     """
     Remove reminder
@@ -372,7 +379,7 @@ class Todo_Remove(TodoBase):
         self.remove(jarvis, s)
 
 
-@plugin('todo progress')
+@plugin("todo progress")
 class Todo_Progress(TodoBase):
     """
     Set progress info
@@ -380,11 +387,11 @@ class Todo_Progress(TodoBase):
 
     def __call__(self, jarvis, s):
         entry = self.select_one_remind(jarvis)
-        entry['progress'] = jarvis.input("Progress: ")
+        entry["progress"] = jarvis.input("Progress: ")
         self.modify(jarvis, entry)
 
 
-@plugin('remind')
+@plugin("remind")
 class Remind(RemindBase):
     """List all scheduled reminders"""
 
@@ -396,7 +403,7 @@ class Remind(RemindBase):
         self.do_print(jarvis)
 
 
-@plugin('remind at')
+@plugin("remind at")
 class Remind_At(RemindBase):
     """
     Add reminder
@@ -406,11 +413,10 @@ class Remind_At(RemindBase):
     """
 
     def __call__(self, jarvis, s):
-        self.remind_add(jarvis, s, self.parse_date_timestamp,
-                        'remind at 12:30 to XXX')
+        self.remind_add(jarvis, s, self.parse_date_timestamp, "remind at 12:30 to XXX")
 
 
-@plugin('remind in')
+@plugin("remind in")
 class Remind_In(RemindBase):
     """
     Add reminder
@@ -420,10 +426,10 @@ class Remind_In(RemindBase):
     """
 
     def __call__(self, jarvis, s):
-        self.remind_add(jarvis, s, timeparse, 'remind in 30m 10s to XXX')
+        self.remind_add(jarvis, s, timeparse, "remind in 30m 10s to XXX")
 
 
-@plugin('remind remove')
+@plugin("remind remove")
 class Remind_Remove(RemindBase):
     """
     -- Example:

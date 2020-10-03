@@ -1,4 +1,5 @@
 import unittest
+
 try:  # for python2
     from StringIO import StringIO
 except ImportError:  # for python3
@@ -11,7 +12,6 @@ from tests import PluginTest
 
 
 class EvaluatorTest(PluginTest):
-
     def setUp(self):
         self.test = self.load_plugin(calculate)
 
@@ -25,10 +25,10 @@ class EvaluatorTest(PluginTest):
         # And now for something a little more _complex_
         self.test.run("(1 pluS 9.1j)^3.14129 mINUS 2.712")
         output = self.history_say().last_text()
-        result = (1 + 9.1j)**3.14129 - 2.712
-        output = output.replace(' ', '').replace('*', '').replace('I', 'j')
+        result = (1 + 9.1j) ** 3.14129 - 2.712
+        output = output.replace(" ", "").replace("*", "").replace("I", "j")
         self.assertLess(abs(complex(output) - result), 0.01)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

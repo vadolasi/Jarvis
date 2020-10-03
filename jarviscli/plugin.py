@@ -20,10 +20,9 @@ def plugin(name):
     def hotspot_start(jarvis, s):
         system("sudo ap-hotspot start")
     """
+
     def create_plugin(run):
-        plugin_class = type(
-            run.__name__, Plugin.__bases__, dict(
-                Plugin.__dict__))
+        plugin_class = type(run.__name__, Plugin.__bases__, dict(Plugin.__dict__))
         plugin_class.__doc__ = run.__doc__
 
         if isclass(run):
@@ -39,21 +38,23 @@ def plugin(name):
         plugin_class._backend_instance = run
 
         return plugin_class
+
     return create_plugin
 
 
 def require(network=None, platform=None, native=None):
     require = []
     if network is not None:
-        require.append(('network', network))
+        require.append(("network", network))
     if platform is not None:
-        require.append(('platform', platform))
+        require.append(("platform", platform))
     if native is not None:
-        require.append(('native', native))
+        require.append(("native", native))
 
     def __require(plugin):
         plugin._require.extend(require)
         return plugin
+
     return __require
 
 
@@ -61,6 +62,7 @@ def complete(*complete):
     def __complete(plugin):
         plugin._complete.extend(complete)
         return plugin
+
     return __complete
 
 
@@ -68,6 +70,7 @@ def alias(*alias):
     def __alias(plugin):
         plugin._alias.extend(alias)
         return plugin
+
     return __alias
 
 
@@ -95,8 +98,8 @@ class PluginStorage(object):
 
 
 class Plugin(pluginmanager.IPlugin, PluginStorage):
-    """
-    """
+    """"""
+
     _backend = None
 
     def __init__(self):
@@ -110,12 +113,9 @@ class Plugin(pluginmanager.IPlugin, PluginStorage):
         (would not be possible with __init__)
         """
         if self.is_callable_plugin():
-            if hasattr(
-                self._backend[0].__class__,
-                "init") and callable(
-                getattr(
-                    self._backend[0].__class__,
-                    "init")):
+            if hasattr(self._backend[0].__class__, "init") and callable(
+                getattr(self._backend[0].__class__, "init")
+            ):
                 self._backend[0].init(jarvis_api)
         for plugin in self.get_plugins().values():
             plugin.init(jarvis_api)
@@ -180,7 +180,7 @@ class Plugin(pluginmanager.IPlugin, PluginStorage):
                 examples += sub_command_doc[1]
             sub_command_doc = sub_command_doc[0]
 
-            if '\n' not in sub_command_doc:
+            if "\n" not in sub_command_doc:
                 doc += sub_command_doc
             else:
                 extended_doc += "\n  {}:\n".format(name)
@@ -207,9 +207,13 @@ class Plugin(pluginmanager.IPlugin, PluginStorage):
             if self.is_callable_plugin():
                 self._backend[0](jarvis.get_api(), s)
             else:
-                jarvis.get_api().say("Sorry, I could not recognise your command. Did you mean:")
+                jarvis.get_api().say(
+                    "Sorry, I could not recognise your command. Did you mean:"
+                )
                 for sub_command in self._sub_plugins.keys():
-                    jarvis.get_api().say("    * {} {}".format(self.get_name(), sub_command))
+                    jarvis.get_api().say(
+                        "    * {} {}".format(self.get_name(), sub_command)
+                    )
         else:
             command = sub_command.split()[0]
             new_s = " ".join(sub_command.split()[1:])

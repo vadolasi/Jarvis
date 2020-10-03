@@ -58,12 +58,12 @@ class RollTest(PluginTest):
                         self.assertTrue(number > 0)
                         self.assertTrue(number <= edges)
 
-            # make sure every number was thrown
+                        # make sure every number was thrown
                         result_check[number - 1] = True
 
             for b in result_check:
                 self.assertTrue(b)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

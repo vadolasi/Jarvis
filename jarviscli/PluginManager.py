@@ -16,6 +16,7 @@ class PluginManager(object):
 
     def __init__(self):
         import pluginmanager.module_manager
+
         self._backend = pluginmanager.PluginInterface()
 
         # patch to ignore import exception
@@ -27,7 +28,9 @@ class PluginManager(object):
             except ImportError as e:
                 print(e)
             import sys
+
             return sys
+
         pluginmanager.module_manager.load_source = patched_load_source
 
         self._plugin_dependency = PluginDependency()
@@ -39,6 +42,7 @@ class PluginManager(object):
         # blacklist files
         def __ends_with_py(s):
             return [x for x in s if x.endswith(".py")]
+
         self._backend.set_file_filters(__ends_with_py)
         self._backend.add_blacklisted_directories("jarviscli/packages/aiml")
         self._backend.add_blacklisted_directories("jarviscli/packages/memory")
@@ -65,8 +69,7 @@ class PluginManager(object):
         for plugin_to_add in enabled:
             self._load_plugin(plugin_to_add, self._cache)
 
-        self._cache_disabled = self._filter_duplicated_disabled(
-            enabled, disabled)
+        self._cache_disabled = self._filter_duplicated_disabled(enabled, disabled)
         self._plugins_loaded = len(enabled)
 
     def _validate_plugins(self, plugins):
@@ -79,13 +82,12 @@ class PluginManager(object):
                     continue
 
                 compability_check_result = self._plugin_dependency.check(
-                    plugin_to_validate)
+                    plugin_to_validate
+                )
                 if compability_check_result is True:
                     plugins_valid.append(plugin_to_validate)
                 else:
-                    item = (
-                        plugin_to_validate.get_name(),
-                        compability_check_result)
+                    item = (plugin_to_validate.get_name(), compability_check_result)
                     plugins_incompatible.append(item)
 
             return (plugins_valid, plugins_incompatible)
@@ -104,15 +106,11 @@ class PluginManager(object):
     def _load_plugin(self, plugin_to_add, plugin_storage):
         def handle_aliases(plugin_to_add):
             add_plugin(
-                plugin_to_add.get_name().split(' '),
-                plugin_to_add,
-                plugin_storage)
+                plugin_to_add.get_name().split(" "), plugin_to_add, plugin_storage
+            )
 
             for name in plugin_to_add.alias():
-                add_plugin(
-                    name.lower().split(' '),
-                    plugin_to_add,
-                    plugin_storage)
+                add_plugin(name.lower().split(" "), plugin_to_add, plugin_storage)
 
         def add_plugin(name, plugin_to_add, parent):
             if len(name) == 1:
@@ -131,17 +129,13 @@ class PluginManager(object):
                 else:
                     error("Duplicated plugin {}!".format(name))
 
-        def add_plugin_compose(
-                name_first,
-                name_remaining,
-                plugin_to_add,
-                parent):
+        def add_plugin_compose(name_first, name_remaining, plugin_to_add, parent):
             plugin_existing = parent.get_plugins(name_first)
 
             if plugin_existing is None:
                 plugin_existing = plugin.Plugin()
                 plugin_existing._name = name_first
-                plugin_existing.__doc__ = ''
+                plugin_existing.__doc__ = ""
                 parent.add_plugin(name_first, plugin_existing)
 
             add_plugin(name_remaining, plugin_to_add, plugin_existing)
@@ -211,11 +205,7 @@ class PluginDependency(object):
             warning("Unsupported platform {}".format(sys.platform))
 
     def _plugin_get_requirements(self, requirements_iter):
-        plugin_requirements = {
-            "platform": [],
-            "network": [],
-            "native": []
-        }
+        plugin_requirements = {"platform": [], "network": [], "native": []}
 
         # parse requirements
         for requirement in requirements_iter:
@@ -272,7 +262,7 @@ class PluginDependency(object):
     def _check_native(self, values, plugin):
         missing = ""
         for native in values:
-            if native.startswith('!'):
+            if native.startswith("!"):
                 # native should not exist
                 requirement_ok = not executable_exists(native[1:])
             else:
@@ -290,5 +280,4 @@ class PluginDependency(object):
 
     def _plugin_patch_network_error_message(self, plugin):
         if "plugin._network_error_patched" not in plugin.__dict__:
-            plugin.run = partial(
-                plugin._plugin_run_with_network_error, plugin.run)
+            plugin.run = partial(plugin._plugin_run_with_network_error, plugin.run)

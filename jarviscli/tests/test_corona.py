@@ -14,11 +14,10 @@ class CoronaInfoTest(PluginTest):
         self.test = self.load_plugin(CoronaInfo)
 
     def test_get_corona_info(self):
-        with patch.object(requests, 'get') as get_mock:
+        with patch.object(requests, "get") as get_mock:
             self.test.get_corona_info("usa")
-            get_mock.assert_called_with(
-                "https://api.covid19api.com/summary")
+            get_mock.assert_called_with("https://api.covid19api.com/summary")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

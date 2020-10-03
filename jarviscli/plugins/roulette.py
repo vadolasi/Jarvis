@@ -2,8 +2,7 @@ from plugin import plugin
 from colorama import Fore
 import random
 
-reds = [1, 3, 5, 7, 9, 12, 14, 16, 18,
-        19, 21, 23, 25, 27, 30, 32, 34, 36]
+reds = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]
 
 
 @plugin("roulette")
@@ -59,14 +58,17 @@ def get_user_choice(jarvis, cash):
     while True:
         try:
             option = int(jarvis.input("Enter your choice: ", Fore.GREEN))
-            if option >= 1 and option <=6:
+            if option >= 1 and option <= 6:
                 return option
             else:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
         except ValueError:
             jarvis.say(
-                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW
+            )
 
 
 def first_choice(jarvis, cash):
@@ -83,8 +85,8 @@ def first_choice(jarvis, cash):
     jarvis.say("Result: " + str(result), Fore.YELLOW)
 
     if result == choice:
-        cash += bet*36
-        jarvis.say("WIN: " + str(bet*36), Fore.GREEN)
+        cash += bet * 36
+        jarvis.say("WIN: " + str(bet * 36), Fore.GREEN)
     else:
         jarvis.say("YOU LOST")
 
@@ -120,9 +122,11 @@ def second_choice(jarvis, cash):
     if result in reds:
         is_red = True
 
-    if (choice==1 and is_red==True and result!=0) or (choice==2 and is_red==False and result!=0):
-        cash += bet*2
-        jarvis.say("WIN: " + str(bet*2), Fore.GREEN)
+    if (choice == 1 and is_red == True and result != 0) or (
+        choice == 2 and is_red == False and result != 0
+    ):
+        cash += bet * 2
+        jarvis.say("WIN: " + str(bet * 2), Fore.GREEN)
     else:
         jarvis.say("YOU LOST")
 
@@ -154,9 +158,11 @@ def third_choice(jarvis, cash):
     print("")
     jarvis.say("Result: " + str(result), Fore.YELLOW)
 
-    if (choice==1 and result%2==1 and result!=0) or (choice==2 and result%2==0 and result!=0):
-        cash += bet*2
-        jarvis.say("WIN: " + str(bet*2), Fore.GREEN)
+    if (choice == 1 and result % 2 == 1 and result != 0) or (
+        choice == 2 and result % 2 == 0 and result != 0
+    ):
+        cash += bet * 2
+        jarvis.say("WIN: " + str(bet * 2), Fore.GREEN)
     else:
         jarvis.say("YOU LOST")
 
@@ -192,21 +198,21 @@ def fourth_choice(jarvis, cash):
     jarvis.say("Result: " + str(result), Fore.YELLOW)
 
     if choice == 1:
-        if result>=1 and result<=12:
-            cash += bet*3
-            jarvis.say("WIN: " + str(bet*3), Fore.GREEN)
+        if result >= 1 and result <= 12:
+            cash += bet * 3
+            jarvis.say("WIN: " + str(bet * 3), Fore.GREEN)
         else:
             jarvis.say("YOU LOST")
     elif choice == 2:
-        if result>=13 and result<=24:
-            cash += bet*3
-            jarvis.say("WIN: " + str(bet*3), Fore.GREEN)
+        if result >= 13 and result <= 24:
+            cash += bet * 3
+            jarvis.say("WIN: " + str(bet * 3), Fore.GREEN)
         else:
             jarvis.say("YOU LOST")
     else:
-        if result>=25 and result<=36:
-            cash += bet*3
-            jarvis.say("WIN: " + str(bet*3), Fore.GREEN)
+        if result >= 25 and result <= 36:
+            cash += bet * 3
+            jarvis.say("WIN: " + str(bet * 3), Fore.GREEN)
         else:
             jarvis.say("YOU LOST")
 
@@ -238,9 +244,11 @@ def fifth_choice(jarvis, cash):
     print("")
     jarvis.say("Result: " + str(result), Fore.YELLOW)
 
-    if (choice==1 and result>=1 and result <=18) or (choice==2 and result>=19 and result <=36):
-        cash += bet*2
-        jarvis.say("WIN: " + str(bet*2), Fore.GREEN)
+    if (choice == 1 and result >= 1 and result <= 18) or (
+        choice == 2 and result >= 19 and result <= 36
+    ):
+        cash += bet * 2
+        jarvis.say("WIN: " + str(bet * 2), Fore.GREEN)
     else:
         jarvis.say("YOU LOST")
 
@@ -258,10 +266,13 @@ def bet_two_choice(jarvis):
                 return option
             else:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
         except ValueError:
             jarvis.say(
-                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW
+            )
 
 
 def bet_three_choice(jarvis):
@@ -273,35 +284,43 @@ def bet_three_choice(jarvis):
                 return option
             else:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
         except ValueError:
             jarvis.say(
-                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW
+            )
 
 
 def bet_number(jarvis):
     while True:
         try:
             option = int(jarvis.input("Enter your choice (0-36): ", Fore.GREEN))
-            if option >= 0 and option <=36:
+            if option >= 0 and option <= 36:
                 return option
             else:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
         except ValueError:
             jarvis.say(
-                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW
+            )
 
 
 def bet_amount(jarvis, cash):
     while True:
         try:
             bet = int(jarvis.input("Enter your bet: ", Fore.GREEN))
-            if bet >= 1 and bet <=cash:
+            if bet >= 1 and bet <= cash:
                 return bet
             else:
                 jarvis.say(
-                    "Invalid input! Enter a bet amount from your cash", Fore.YELLOW)
+                    "Invalid input! Enter a bet amount from your cash", Fore.YELLOW
+                )
         except ValueError:
             jarvis.say(
-                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW
+            )

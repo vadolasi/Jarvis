@@ -3,8 +3,8 @@ from colorama import Back, Fore, Style
 import random
 
 
-@plugin('rockpaperscissors')
-class rockpaperscissors():
+@plugin("rockpaperscissors")
+class rockpaperscissors:
     """
     rockpaperscissors Dcoumentation.
     rockpaperscssors is the game Rock - Paper - Scissors that we all know with Jarvis as opponent.
@@ -40,19 +40,19 @@ class rockpaperscissors():
 
         i = 1
 
-        while(i <= int(rounds)):
+        while i <= int(rounds):
 
             user_move = self.get_users("Enter your move: ")
 
-            if (user_move == 'exit'):
+            if user_move == "exit":
                 exit = True
                 break
 
-            if (user_move == "score"):
+            if user_move == "score":
                 txt = "You:" + str(user_score) + "  Jarvis:" + str(jarvis_score) + "  "
-                if (user_score > jarvis_score):
+                if user_score > jarvis_score:
                     txt = txt + Back.GREEN + "You Winning" + Back.RESET
-                elif(user_score < jarvis_score):
+                elif user_score < jarvis_score:
                     txt = txt + Back.RED + "You Losing" + Back.RESET
                 else:
                     txt = txt + Back.WHITE + "Tie" + Back.RESET
@@ -60,7 +60,7 @@ class rockpaperscissors():
                 jarvis.say(txt)
                 continue
 
-            if (user_move == "rounds"):
+            if user_move == "rounds":
                 jarvis.say("The current rounds is " + str(i) + "/" + str(rounds))
                 continue
 
@@ -69,11 +69,11 @@ class rockpaperscissors():
 
             g = self.game(user_move, jarvis_move)
 
-            if (g == "W"):
+            if g == "W":
                 user_score = user_score + 1
                 jarvis.say("\t" + Back.GREEN + "You WIN" + Back.RESET)
                 i = i + 1
-            elif (g == "L"):
+            elif g == "L":
                 jarvis_score = jarvis_score + 1
                 jarvis.say("\t" + Back.RED + "Jarvis WIN" + Back.RESET)
                 i = i + 1
@@ -84,23 +84,25 @@ class rockpaperscissors():
         jarvis.say("")
         jarvis.say("\t\t" + "GAME OVER")
         jarvis.say("\t\t" + "--SCORE--")
-        jarvis.say("\t" + "YOU: " + str(user_score) + "\t" + "JARVIS: " + str(jarvis_score))
+        jarvis.say(
+            "\t" + "YOU: " + str(user_score) + "\t" + "JARVIS: " + str(jarvis_score)
+        )
 
-        if (user_score > jarvis_score):
+        if user_score > jarvis_score:
             txt = Back.GREEN + "\t\tYOU WIN!!" + Back.RESET
-        elif (user_score < jarvis_score):
+        elif user_score < jarvis_score:
             txt = Back.RED + "\t\tYOU LOSE!" + Back.RESET
         else:
             txt = Back.WHITE + "\t\tTIE" + Back.RESET
 
-        if (exit is True):
+        if exit is True:
             r = str(i - 1)
 
-            if (r == "1"):
+            if r == "1":
                 r = r + "st"
-            elif (r == "2"):
+            elif r == "2":
                 r = r + "nd"
-            elif (r == "3"):
+            elif r == "3":
                 r = r + "rd"
             else:
                 r = r + "th"
@@ -112,10 +114,10 @@ class rockpaperscissors():
 
         while True:
             rounds = input(prompt)
-            if (int(rounds) <= 100):
+            if int(rounds) <= 100:
                 return rounds
             else:
-                prompt = 'Laps should be under 100 \n'
+                prompt = "Laps should be under 100 \n"
 
     def get_users(self, prompt):
 
@@ -124,18 +126,18 @@ class rockpaperscissors():
         while True:
             u = input(prompt).lower()
             if u in moves:
-                if (u == "rock"):
+                if u == "rock":
                     u = "r"
-                elif (u == "paper"):
+                elif u == "paper":
                     u = "p"
-                elif (u == "scissors"):
+                elif u == "scissors":
                     u = "s"
                 else:
                     return u
 
                 return u
             else:
-                prompt = 'Please enter a valid move: '
+                prompt = "Please enter a valid move: "
                 continue
 
     def get_jarvis(self):
@@ -148,11 +150,15 @@ class rockpaperscissors():
 
         condition = ""
 
-        if (umove == jmove):
+        if umove == jmove:
             condition = "T"
 
         else:
-            if ((umove == "r" and jmove == "s") or (umove == "s" and jmove == "p") or (umove == "p" and jmove == "r")):
+            if (
+                (umove == "r" and jmove == "s")
+                or (umove == "s" and jmove == "p")
+                or (umove == "p" and jmove == "r")
+            ):
                 condition = "W"
             else:
                 condition = "L"

@@ -5,8 +5,8 @@ from utilities.textParser import parse_number
 from plugin import plugin
 
 
-@plugin('roll')
-class Roll():
+@plugin("roll")
+class Roll:
     """
     Roll a dice
     -- Example:
@@ -29,7 +29,7 @@ class Roll():
 
             jarvis.say(border, Fore.BLUE)
             jarvis.say(result, Fore.BLUE)
-            jarvis.say(border + '\n', Fore.BLUE)
+            jarvis.say(border + "\n", Fore.BLUE)
 
     def _dice_parse(self, s):
         repeat = 1
@@ -77,18 +77,24 @@ class Roll():
             return "No dice to roll?"
         if config["howmany"] < 0:
             return "Rolling {} dices does not really make sense ;).".format(
-                config["howmany"])
+                config["howmany"]
+            )
         if config["repeat"] == 0:
             return "Roll 0 howmany? Finish!"
         if config["repeat"] < 0:
             return "Doing something {} does not really make sense ;).".format(
-                config["repeat"])
+                config["repeat"]
+            )
         if config["edges"] <= 1:
             return "A dice with {} edges does not really make sense ;).".format(
-                config["edges"])
+                config["edges"]
+            )
 
         return False
 
     def _dice_roll(self, config):
         for _ in range(config["repeat"]):
-            yield [str(random.randint(1, config["edges"])) for _ in range(config["howmany"])]
+            yield [
+                str(random.randint(1, config["edges"]))
+                for _ in range(config["howmany"])
+            ]

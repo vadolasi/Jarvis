@@ -19,12 +19,40 @@ def parse_number(string, numwords=None):
     if numwords is None:
         numwords = {}
     if not numwords:
-        units = ["zero", "one", "two", "three",
-                 "four", "five", "six", "seven", "eight", "nine", "ten",
-                 "eleven", "twelve", "thirteen", "fourteen", "fifteen",
-                 "sixteen", "seventeen", "eighteen", "nineteen"]
-        tens = ["", "", "twenty", "thirty", "forty", "fifty",
-                "sixty", "seventy", "eighty", "ninety"]
+        units = [
+            "zero",
+            "one",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "eleven",
+            "twelve",
+            "thirteen",
+            "fourteen",
+            "fifteen",
+            "sixteen",
+            "seventeen",
+            "eighteen",
+            "nineteen",
+        ]
+        tens = [
+            "",
+            "",
+            "twenty",
+            "thirty",
+            "forty",
+            "fifty",
+            "sixty",
+            "seventy",
+            "eighty",
+            "ninety",
+        ]
         scales = ["hundred", "thousand", "million", "billion", "trillion"]
 
         numwords["and"] = (1, 0)
@@ -102,8 +130,7 @@ def parse_date(string):
                 ret_date += timedelta(days=7)
             parse_day = False
         elif parse_delta_value:
-            parse_delta_unit, delta_value = parse_number(
-                " ".join(elements[index:]))
+            parse_delta_unit, delta_value = parse_number(" ".join(elements[index:]))
             parse_delta_value = False
         elif parse_delta_unit:
             new_time = dt.combine(ret_date, ret_time)

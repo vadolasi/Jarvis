@@ -6,7 +6,7 @@ from Jarvis import Jarvis
 
 class LengthconvTest(PluginTest):
     """
-        This class is testing the lengthconv plugin
+    This class is testing the lengthconv plugin
     """
 
     def setUp(self):
@@ -166,5 +166,5 @@ class LengthconvTest(PluginTest):
         convamount = self.test.length_convert(Jarvis, amount, from_unit, to_unit)
         self.assertEqual(convamount, 32186.88001229384)
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         unittest.main()

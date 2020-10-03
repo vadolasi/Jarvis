@@ -5,7 +5,7 @@ from colorama import Fore
 from plugin import plugin
 
 
-@plugin('cat his')
+@plugin("cat his")
 def cat_history(jarvis, s):
     """Prints the history of commands"""
     HISTORY_FILENAME.seek(0)

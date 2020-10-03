@@ -4,8 +4,8 @@ from colorama import Fore
 from plugin import plugin
 
 
-@plugin('tempconv')
-class Tempconv():
+@plugin("tempconv")
+class Tempconv:
     """
     Convert temperature from Fahrenheit to Celsius and vice versa
     Examples: 32f, 18C, -20F, -8c, 105.4F, -10.21C
@@ -19,8 +19,9 @@ class Tempconv():
         # Print an error if the input string fails the regex test.
         else:
             jarvis.say(
-                "I'm sorry, invalid input. Please see \"help tempconv\" for syntax.",
-                Fore.RED)
+                'I\'m sorry, invalid input. Please see "help tempconv" for syntax.',
+                Fore.RED,
+            )
 
     def temp_valid_regex(self, s):
         """Validate the input string using regex and return a boolean for validity"""
@@ -36,7 +37,7 @@ class Tempconv():
         starting_temp = float(s[:-1])
 
         # run conversions and create output string.
-        if s[-1].lower() == 'f':
+        if s[-1].lower() == "f":
             new_temp = self.convert_f_to_c(starting_temp)
             output = "{}° F is {}° C".format(starting_temp, new_temp)
         else:

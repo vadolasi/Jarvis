@@ -2,8 +2,8 @@ from __future__ import division
 from plugin import plugin
 
 
-@plugin('timeconv')
-class timeconv():
+@plugin("timeconv")
+class timeconv:
     """
     timeconv Documentation.
     timeconv is a time converter.
@@ -26,9 +26,7 @@ class timeconv():
         And then you will be asked to enter to which time measurement unit you want to convert.
     """
 
-    time_units = [
-        "yr", "mon", "wk", "d", "h", "min", "s", "ms", "mus", "ns", "ps"
-    ]
+    time_units = ["yr", "mon", "wk", "d", "h", "min", "s", "ms", "mus", "ns", "ps"]
 
     units = {
         "ps": "picosecond",
@@ -41,7 +39,7 @@ class timeconv():
         "d": "day",
         "wk": "week",
         "mon": "month",
-        "yr": "year"
+        "yr": "year",
     }
 
     units_data = {
@@ -54,30 +52,32 @@ class timeconv():
         "s2ms": 1000,
         "ms2mus": 1000,
         "mus2ns": 1000,
-        "ns2ps": 1000
+        "ns2ps": 1000,
     }
 
     def __call__(self, jarvis, s):
         while True:
-            amount = jarvis.input_number('Enter an amount: ')
-            from_unit = self.get_units(jarvis, 'Enter from which unit: ')
-            to_unit = self.get_units(jarvis, 'Enter to which unit: ')
+            amount = jarvis.input_number("Enter an amount: ")
+            from_unit = self.get_units(jarvis, "Enter from which unit: ")
+            to_unit = self.get_units(jarvis, "Enter to which unit: ")
 
-            if (from_unit != to_unit):
+            if from_unit != to_unit:
                 break
             else:
-                jarvis.say('Please enter different units')
+                jarvis.say("Please enter different units")
 
         convamount = self.time_convert(jarvis, amount, from_unit, to_unit)
 
         precision = 0
-        if (convamount.is_integer() is False):
+        if convamount.is_integer() is False:
             precision = jarvis.input_number("Please enter precision (max:12): ")
             while True:
-                if (precision.is_integer() and precision <= 12):
+                if precision.is_integer() and precision <= 12:
                     break
                 else:
-                    precision = jarvis.input_number("Please enter an integer (max:12): ")
+                    precision = jarvis.input_number(
+                        "Please enter an integer (max:12): "
+                    )
 
         convamount = round(convamount, int(precision))
 
@@ -88,16 +88,16 @@ class timeconv():
     def time_convert(self, jarvis, amount, fr, to):
 
         for i in range(len(self.time_units)):
-            if (self.time_units[i] == fr):
+            if self.time_units[i] == fr:
                 start = i
 
-            if (self.time_units[i] == to):
+            if self.time_units[i] == to:
                 end = i
 
-        if ((end - start) > 0):
+        if (end - start) > 0:
             reverse = False
 
-        if ((end - start) < 0):
+        if (end - start) < 0:
             reverse = True
             tmp = start
             start = end
@@ -129,21 +129,29 @@ class timeconv():
             if u in self.time_units:
                 return u
             else:
-                prompt = 'Please enter a valid unit: '
+                prompt = "Please enter a valid unit: "
                 continue
 
     def txt_build(self, amount, convamount, from_unit, to_unit):
 
-        if (amount == 1):
+        if amount == 1:
             fromdisp = self.units.get(from_unit)
         else:
             fromdisp = self.units.get(from_unit) + "s"
 
-        if (convamount == 1):
+        if convamount == 1:
             todisp = self.units.get(to_unit)
         else:
             todisp = self.units.get(to_unit) + "s"
 
-        txt = str(amount) + " " + fromdisp + " is equal to " + str(convamount) + " " + todisp
+        txt = (
+            str(amount)
+            + " "
+            + fromdisp
+            + " is equal to "
+            + str(convamount)
+            + " "
+            + todisp
+        )
 
         return txt

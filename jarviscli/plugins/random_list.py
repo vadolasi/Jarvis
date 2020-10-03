@@ -19,7 +19,7 @@ def get_user_input(jarvis):
     ls = list()
     while True:
         try:
-            user_input = jarvis.input("Enter string (enter \"JarvisStop\" to end): ")
+            user_input = jarvis.input('Enter string (enter "JarvisStop" to end): ')
             if user_input == "JarvisStop":
                 break
             ls.append(user_input)

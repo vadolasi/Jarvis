@@ -7,8 +7,8 @@ from plugin import plugin, require
 
 
 @require(network=True)
-@plugin('lyrics')
-class lyrics():
+@plugin("lyrics")
+class lyrics:
     """
     finds lyrics
     the format is song,artist
@@ -55,7 +55,7 @@ class lyrics():
     @classmethod
     def parse(self, s):
         # separate song/artist/album by a -
-        information = s.split('-')
+        information = s.split("-")
         return information
 
 
@@ -70,23 +70,23 @@ I just copied and fix the methods used in PyLyrics
 
 def get_lyric(singer, song):
     # Replace spaces with _
-    singer = singer.replace(' ', '_')
-    song = song.replace(' ', '_')
-    url = 'http://lyrics.wikia.com/{0}:{1}'.format(singer, song)
+    singer = singer.replace(" ", "_")
+    song = song.replace(" ", "_")
+    url = "http://lyrics.wikia.com/{0}:{1}".format(singer, song)
     req = requests.get(url)
     s = bs4.BeautifulSoup(req.text, "lxml")
     # Get main lyrics holder
-    lyrics = s.find("div", {'class': 'lyricbox'})
+    lyrics = s.find("div", {"class": "lyricbox"})
     if lyrics is None:
         return None
     # Remove Scripts
-    [k.extract() for k in lyrics('script')]
+    [k.extract() for k in lyrics("script")]
     # Remove comments
     comments = lyrics.findAll(text=lambda text: isinstance(text, bs4.Comment))
     # for c in comments:
     #     c.extract()
     # Remove unecessary tags
-    for tag in ['div', 'i', 'b', 'a']:
+    for tag in ["div", "i", "b", "a"]:
         for match in lyrics.findAll(tag):
             match.replaceWithChildren()
 
@@ -96,8 +96,8 @@ def get_lyric(singer, song):
     # get output as string and remove non unicode characters and replace <br> with newlines
     # output = str(lyrics).encode('utf-8', errors = 'replace')[22:-6:] \
     #     .decode('utf-8').replace('\n','').replace('<br/>','\n')
-    output = str(lyrics).replace('\n', '').replace('<br/>', '\n')[22:-6:]
+    output = str(lyrics).replace("\n", "").replace("<br/>", "\n")[22:-6:]
     try:
         return output
     except BaseException:
-        return output.encode('utf-8')
+        return output.encode("utf-8")

@@ -37,12 +37,18 @@ def fail(msg, fatal=False):
     log("Installation failed")
     log(msg)
     print(msg)
-    print('')
-    print('')
+    print("")
+    print("")
     if fatal:
         log("FATAL!")
-        print("Installation failed with unexpected error - This should not have happened.")
-        print("Please check logs at \"{}\". If you open a bug report, please include this file.".format(debug_log.name))
+        print(
+            "Installation failed with unexpected error - This should not have happened."
+        )
+        print(
+            'Please check logs at "{}". If you open a bug report, please include this file.'.format(
+                debug_log.name
+            )
+        )
     else:
         print("Installation failed!")
     debug_log.close()
@@ -52,19 +58,19 @@ def fail(msg, fatal=False):
 def log(msg):
     try:
         debug_log.write(msg)
-        debug_log.write('\n')
+        debug_log.write("\n")
     except Exception as e:
-        print('------------------------------')
+        print("------------------------------")
         print("Logging failed?")
         print(repr(e))
         print(str(e))
         print(str(e.args))
-        print('msg:')
+        print("msg:")
         try:
             print(str(msg))
         except:
-            print('msg unprintable')
-        print('-----------------------------')
+            print("msg unprintable")
+        print("-----------------------------")
 
 
 def printlog(msg):
@@ -86,11 +92,11 @@ def spinning_cursor_start():
     def spin_start():
         time.sleep(0.1)
         while spinning:
-            for cursor in '|/-\\':
+            for cursor in "|/-\\":
                 sys.stdout.write(cursor)
                 sys.stdout.flush()
                 time.sleep(0.1)
-                sys.stdout.write('\b')
+                sys.stdout.write("\b")
 
     Thread(target=spin_start).start()
 
@@ -122,7 +128,7 @@ def user_input(items):
 
 def shell(cmd):
     class Fail:
-        def should_not_fail(self, msg=''):
+        def should_not_fail(self, msg=""):
             fail(msg, fatal=True)
 
         def success(self):
@@ -132,7 +138,7 @@ def shell(cmd):
             return "FAIL {}".format(self.exception)
 
     class Success:
-        def should_not_fail(self, msg=''):
+        def should_not_fail(self, msg=""):
             pass
 
         def success(self):
@@ -147,9 +153,11 @@ def shell(cmd):
     log("Shell: {}".format(cmd))
     spinning_cursor_start()
 
-    cli_output = ''
+    cli_output = ""
     try:
-        cli_output = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True)
+        cli_output = subprocess.check_output(
+            cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True
+        )
     except subprocess.CalledProcessError as e:
         exit_code = Fail()
         exit_code.exception = str(e)
@@ -169,6 +177,6 @@ def shell(cmd):
 
     spinning_cursor_stop()
     time.sleep(0.5)
-    sys.stdout.write(' \b')
+    sys.stdout.write(" \b")
 
     return exit_code

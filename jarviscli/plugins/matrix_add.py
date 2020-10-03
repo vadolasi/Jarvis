@@ -24,22 +24,22 @@ def print_matrix(matrix, r, c):
 def matrix_add(jarvis, s):
     jarvis.say("Sum of matrices with dimensions M x N", Fore.GREEN)
 
-    row = int(jarvis.input_number('Enter M (rows): '))
-    col = int(jarvis.input_number('Enter N (cols): '))
+    row = int(jarvis.input_number("Enter M (rows): "))
+    col = int(jarvis.input_number("Enter N (cols): "))
 
     initial = get_matrix(jarvis, row, col)
 
     while True:
         next_decision = jarvis.input("Continue with next matrix? ")
-        if next_decision.lower() == 'no':
+        if next_decision.lower() == "no":
             break
         next_matrix = get_matrix(jarvis, row, col)
         for i in range(row):
             for j in range(col):
                 initial[i][j] += next_matrix[i][j]
         current_decision = jarvis.input("Print current sum matrix? ")
-        if current_decision.lower() != 'no':
+        if current_decision.lower() != "no":
             print_matrix(initial, row, col)
 
-    jarvis.say('Final sum matrix:')
+    jarvis.say("Final sum matrix:")
     print_matrix(initial, row, col)

@@ -30,10 +30,13 @@ def get_option(jarvis):
                 return option
             else:
                 jarvis.say(
-                    "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                    "Invalid input! Enter a number from the choices provided.",
+                    Fore.YELLOW,
+                )
         except ValueError:
             jarvis.say(
-                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW)
+                "Invalid input! Enter a number from the choices provided.", Fore.YELLOW
+            )
         print()
 
 
@@ -94,8 +97,7 @@ def get_user_input(jarvis):
             if len(user_input) > 0:
                 return user_input
             else:
-                jarvis.say(
-                    "String length should be minimum 1.", Fore.YELLOW)
+                jarvis.say("String length should be minimum 1.", Fore.YELLOW)
         except ValueError:
             jarvis.say("Sorry, I didn't understand that.", Fore.RED)
             continue

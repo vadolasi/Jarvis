@@ -5,7 +5,7 @@ from plugins.bmi import Bmi
 
 class BmiTest(PluginTest):
     """
-        this class is testing the bmi plugin
+    this class is testing the bmi plugin
     """
 
     def setUp(self):
@@ -38,5 +38,5 @@ class BmiTest(PluginTest):
         self.assertEqual(d, 29.5)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

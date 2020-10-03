@@ -4,7 +4,7 @@ from plugin import plugin, require
 
 
 @require(network=True)
-@plugin('cat fact')
+@plugin("cat fact")
 def cat_fact(jarvis, s):
     """Tells a random cat fact"""
 

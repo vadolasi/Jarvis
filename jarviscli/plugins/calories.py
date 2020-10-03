@@ -24,7 +24,9 @@ class calories:
 
     def __call__(self, jarvis, s):
         jarvis.say("Welcome!")
-        info = input("Please enter the information about you following this order(gender age height(cms) weight(kg) workout level(1-4)): ")
+        info = input(
+            "Please enter the information about you following this order(gender age height(cms) weight(kg) workout level(1-4)): "
+        )
         self.calories(jarvis, info)
 
     def calories(self, jarvis, info):
@@ -40,14 +42,22 @@ class calories:
             return None
 
         gender_no = 0
-        if(gender == "male" or gender == "man" or gender == "m"):
+        if gender == "male" or gender == "man" or gender == "m":
             gender_no = 5
-        elif(gender == "female" or gender == 'woman' or gender == "f"):
+        elif gender == "female" or gender == "woman" or gender == "f":
             gender_no = -161
 
-        if gender_no != 0 and age > 14 and height > 0.0 and weight > 0.0 and level > 0 and level < 5:
-            brm = float(10 * weight + 6.25 * height - 5
-                        * age + gender_no) * self.exercise_level(level)
+        if (
+            gender_no != 0
+            and age > 14
+            and height > 0.0
+            and weight > 0.0
+            and level > 0
+            and level < 5
+        ):
+            brm = float(
+                10 * weight + 6.25 * height - 5 * age + gender_no
+            ) * self.exercise_level(level)
             brm_loss = brm - 500.0
             brm_put_on = brm + 500.0
             jarvis.say("Daily caloric intake :    " + str(brm))

@@ -5,7 +5,6 @@ from tests import PluginTest
 
 
 class WikiTest(PluginTest):
-
     def setUp(self):
         self.wiki = self.load_plugin(wiki.Wiki)
 
@@ -45,5 +44,5 @@ class WikiTest(PluginTest):
         self.assertEqual(len(d), 5)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

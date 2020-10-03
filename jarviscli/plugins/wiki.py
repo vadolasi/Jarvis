@@ -4,8 +4,8 @@ from plugin import plugin, complete, require
 
 @require(network=True)
 @complete("search", "sumary", "content")
-@plugin('wiki')
-class Wiki():
+@plugin("wiki")
+class Wiki:
     """
     Jarvis has now wiki feature
     enter wiki search for searching related topics
@@ -14,10 +14,11 @@ class Wiki():
     """
 
     def __call__(self, jarvis, s):
-        k = s.split(' ', 1)
+        k = s.split(" ", 1)
         if len(k) == 1:
             jarvis.say(
-                "Do you mean:\n1. wiki search <subject>\n2. wiki summary <subject>\n3. wiki content <subject>")
+                "Do you mean:\n1. wiki search <subject>\n2. wiki summary <subject>\n3. wiki content <subject>"
+            )
         else:
             data = None
             if k[0] == "search":
@@ -54,12 +55,8 @@ class Wiki():
             return error.options[:5]
 
     def content(
-            self,
-            title=None,
-            pageid=None,
-            auto_suggest=True,
-            redirect=True,
-            preload=False):
+        self, title=None, pageid=None, auto_suggest=True, redirect=True, preload=False
+    ):
         """Returns plain text content of query's page, excluding images, tables and other data."""
         try:
             page = wikipedia.page(title)

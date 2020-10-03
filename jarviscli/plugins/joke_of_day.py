@@ -4,7 +4,7 @@ from colorama import Fore
 
 
 @require(network=True)
-@plugin('joke daily')
+@plugin("joke daily")
 class joke_of_day:
     """
     Provides you with a joke of day to help you laugh amidst the
@@ -25,12 +25,11 @@ class joke_of_day:
     def get_joke(self, jarvis):
         while True:
             url = "https://api.jokes.one/jod"
-            jarvis.spinner_start('Fetching')
+            jarvis.spinner_start("Fetching")
             r = requests.get(url)
             if r is None:
                 spinner.stop()
-                jarvis.say(
-                    "Error in fetching joke - try again! later", Fore.RED)
+                jarvis.say("Error in fetching joke - try again! later", Fore.RED)
             jarvis.spinner_stop()
             return r.json()
 

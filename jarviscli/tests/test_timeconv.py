@@ -6,7 +6,7 @@ from Jarvis import Jarvis
 
 class TimeconvTest(PluginTest):
     """
-        This class is testing the timeconv plugin
+    This class is testing the timeconv plugin
     """
 
     def setUp(self):
@@ -104,7 +104,7 @@ class TimeconvTest(PluginTest):
         self.assertEqual(convamount, 30000.0)
 
     def test_13_s2ms(self):
-        amount = 30.
+        amount = 30.0
         from_unit = "s"
         to_unit = "ms"
         convamount = self.test.time_convert(Jarvis, amount, from_unit, to_unit)
@@ -166,5 +166,5 @@ class TimeconvTest(PluginTest):
         convamount = self.test.time_convert(Jarvis, amount, from_unit, to_unit)
         self.assertEqual(convamount, 7200000.0)
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         unittest.main()

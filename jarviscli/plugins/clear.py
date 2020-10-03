@@ -2,7 +2,7 @@ import os
 from plugin import plugin
 
 
-@plugin('clear')
+@plugin("clear")
 def clear(jarvis, s):
     """Clears terminal"""
     os.system("clear")

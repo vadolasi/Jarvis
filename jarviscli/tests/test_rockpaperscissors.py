@@ -6,7 +6,7 @@ from Jarvis import Jarvis
 
 class RockpaperscissorsTest(PluginTest):
     """
-        This class is testing the rockpaperscissors plugin
+    This class is testing the rockpaperscissors plugin
     """
 
     def setUp(self):
@@ -66,5 +66,5 @@ class RockpaperscissorsTest(PluginTest):
         result = self.test.game(umove, jmove)
         self.assertEqual(result, "T")
 
-    if __name__ == '__main__':
+    if __name__ == "__main__":
         unittest.main()

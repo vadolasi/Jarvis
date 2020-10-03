@@ -8,7 +8,9 @@ class htmltopdf:
     """Convert your html file or web page into pdf file"""
 
     def __call__(self, jarvis, s):
-        jarvis.say("Welcome to the htmltopdf convertor! \nType 'help htmltopdf' to learn how to use it")
+        jarvis.say(
+            "Welcome to the htmltopdf convertor! \nType 'help htmltopdf' to learn how to use it"
+        )
 
 
 @require(platform=LINUX, native=["wkhtmltopdf"])
@@ -30,9 +32,12 @@ class htmltopdf_file:
             jarvis.say("Your file must end with '.html'")
         else:
             try:
-                pdfkit.from_file(s, s.replace('.html', '') + '.pdf')
+                pdfkit.from_file(s, s.replace(".html", "") + ".pdf")
             except OSError as err:
-                jarvis.say("OS error: {0}".format(err) + "\nMake sur your file is in the source directory of Jarvis and is an html file")
+                jarvis.say(
+                    "OS error: {0}".format(err)
+                    + "\nMake sur your file is in the source directory of Jarvis and is an html file"
+                )
 
 
 @require(platform=LINUX, native=["wkhtmltopdf"], network=True)
@@ -48,10 +53,13 @@ class htmltopdf_url:
     def __call__(self, jarvis, s):
         if not s:
             jarvis.say("please enter an url after calling the plugin")
-        elif '.' not in s:
+        elif "." not in s:
             jarvis.say("please make sur your url is valid")
         else:
             try:
-                pdfkit.from_url(s, s + '.pdf')
+                pdfkit.from_url(s, s + ".pdf")
             except IOError as err:
-                jarvis.say("IO error: {0}".format(err) + "\nMake sure your URL is valid and that you have access to the internet")
+                jarvis.say(
+                    "IO error: {0}".format(err)
+                    + "\nMake sure your URL is valid and that you have access to the internet"
+                )
